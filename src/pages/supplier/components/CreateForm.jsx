@@ -2,10 +2,11 @@ import { supplierAdd } from "@/services/supplier";
 import { PlusOutlined } from "@ant-design/icons";
 import { ModalForm, ProFormText } from "@ant-design/pro-components";
 import { Button, message } from "antd";
+import { useState } from "react";
 
 const CreateForm = (props) => {
   const { reload } = props;
-
+  const [open, setOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
 
   return (
@@ -13,8 +14,13 @@ const CreateForm = (props) => {
       {contextHolder}
       <ModalForm
         title="新建供应商"
+        open={open}
         trigger={
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button
+            onClick={() => setOpen(true)}
+            type="primary"
+            icon={<PlusOutlined />}
+          >
             新建
           </Button>
         }
@@ -23,11 +29,12 @@ const CreateForm = (props) => {
         onFinish={async (value) => {
           const res = await supplierAdd(value);
           if (res.code === 200) {
-            messageApi.success(res.meg);
+            messageApi.success(res.meg || "添加成功");
             reload();
+            setOpen(false);
             return true;
           } else {
-            messageApi.error(res.meg);
+            messageApi.error(res.meg || "添加失败，请重试");
             return false;
           }
         }}

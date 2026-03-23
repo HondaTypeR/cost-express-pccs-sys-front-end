@@ -23,9 +23,13 @@ const CreateForm = (props) => {
 
   const { run, loading } = useRequest(addUser, {
     manual: true,
-    onSuccess: () => {
-      messageApi.success("添加成功");
-      reload?.();
+    onSuccess: (res) => {
+      if (res.code === 200) {
+        messageApi.success("添加成功");
+        reload?.();
+      } else {
+        messageApi.error(res?.msg || "添加失败，请重试");
+      }
     },
     onError: () => {
       messageApi.error("添加失败，请重试");
@@ -52,6 +56,7 @@ const CreateForm = (props) => {
             nickname: value?.username,
             name: value?.username,
             password: "123456",
+            menu_role: "admin",
           });
           return true;
         }}
