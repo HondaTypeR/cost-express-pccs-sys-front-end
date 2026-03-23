@@ -9,11 +9,12 @@ import {
 } from "@ant-design/pro-components";
 import { useRequest } from "@umijs/max";
 import { Button, message } from "antd";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 const CreateForm = (props) => {
   const { reload, companyList } = props;
   const formRef = useRef();
+  const [open, setOpen] = useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
   /**
@@ -24,12 +25,9 @@ const CreateForm = (props) => {
   const { run, loading } = useRequest(addUser, {
     manual: true,
     onSuccess: (res) => {
-      if (res.code === 200) {
-        messageApi.success("添加成功");
-        reload?.();
-      } else {
-        messageApi.error(res?.msg || "添加失败，请重试");
-      }
+      messageApi.success("添加成功");
+      setOpen(false);
+      reload?.();
     },
     onError: () => {
       messageApi.error("添加失败，请重试");
@@ -42,8 +40,13 @@ const CreateForm = (props) => {
       <ModalForm
         title="新建人员"
         formRef={formRef}
+        open={open}
         trigger={
-          <Button type="primary" icon={<PlusOutlined />}>
+          <Button
+            type="primary"
+            onClick={() => setOpen(true)}
+            icon={<PlusOutlined />}
+          >
             新建
           </Button>
         }
