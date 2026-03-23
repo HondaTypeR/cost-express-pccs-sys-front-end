@@ -506,6 +506,9 @@ const CreateForm = (props) => {
                 message: "请输入用地面积",
               },
             ]}
+            fieldProps={{
+              suffix: "m²",
+            }}
             placeholder="请输入用地面积"
           />
           <ProFormText
@@ -530,6 +533,9 @@ const CreateForm = (props) => {
                 message: "请输入总建筑面积",
               },
             ]}
+            fieldProps={{
+              suffix: "m²",
+            }}
             placeholder="请输入总建筑面积"
           />
           <ProFormText
@@ -542,6 +548,9 @@ const CreateForm = (props) => {
                 message: "请输入住宅面积",
               },
             ]}
+            fieldProps={{
+              suffix: "m²",
+            }}
             placeholder="请输入住宅面积"
           />
           <ProFormText
@@ -554,6 +563,9 @@ const CreateForm = (props) => {
                 message: "请输入商铺面积",
               },
             ]}
+            fieldProps={{
+              suffix: "m²",
+            }}
             placeholder="请输入商铺面积"
           />
           <ProFormText
@@ -566,6 +578,9 @@ const CreateForm = (props) => {
                 message: "请输入地下室面积",
               },
             ]}
+            fieldProps={{
+              suffix: "m²",
+            }}
             placeholder="请输入地下室面积"
           />
           <ProFormText
@@ -578,6 +593,9 @@ const CreateForm = (props) => {
                 message: "请输入公共面积",
               },
             ]}
+            fieldProps={{
+              suffix: "m²",
+            }}
             placeholder="请输入公共面积"
           />
           <ProFormText

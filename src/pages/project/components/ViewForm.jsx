@@ -21,6 +21,10 @@ const ViewForm = (props) => {
   const parsedData = values?.additional_info1
     ? JSON.parse(values.additional_info1)
     : [];
+  // 从 additional_info2 中解析全局数据
+  const parsedGlobalData = values?.additional_info2
+    ? JSON.parse(values.additional_info2)
+    : { material: {}, machinery: {}, labor: {}, cost: {} };
 
   // 从 dataSource 中提取各行的材料、机械、人工、费用数据
   const extractDataByType = (rows, type) => {
@@ -53,6 +57,10 @@ const ViewForm = (props) => {
   const [costSupplierData] = useState(
     extractDataByType(parsedData, "cost_supplier")
   );
+  const globalMaterialData = parsedGlobalData.material || {};
+  const globalMachineryData = parsedGlobalData.machinery || {};
+  const globalLaborData = parsedGlobalData.labor || {};
+  const globalCostData = parsedGlobalData.cost || {};
   const [selectedPhases, setSelectedPhases] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [currentRowId, setCurrentRowId] = useState(null);
@@ -81,7 +89,8 @@ const ViewForm = (props) => {
       width: 150,
       render: (text) => {
         if (!text) return "-";
-        const found = PhaseNum.find((item) => item.value === text);
+        const t = String(text).trim();
+        const found = PhaseNum.find((item) => item.value === t);
         return found ? found.label : text;
       },
     },
@@ -104,7 +113,7 @@ const ViewForm = (props) => {
       title: "操作",
       valueType: "option",
       width: 360,
-      render: () => [
+      render: (text, record) => [
         <Tag
           key="material"
           color="blue"
@@ -113,6 +122,19 @@ const ViewForm = (props) => {
             cursor: "pointer",
             textAlign: "center",
           }}
+          onClick={() => {
+            const phases = (values?.phase_num || "")
+              .split(",")
+              .map((p) => p.trim())
+              .filter(Boolean);
+            if (!phases || phases.length === 0) {
+              message.warning("请先选择期数");
+              return;
+            }
+            setCurrentRowId(record.id);
+            setSelectedPhases(phases);
+            setMaterialModalOpen(true);
+          }}
         >
           材料
         </Tag>,
@@ -120,18 +142,57 @@ const ViewForm = (props) => {
           key="machinery"
           color="red"
           style={{ width: "50px", cursor: "pointer", textAlign: "center" }}
+          onClick={() => {
+            const phases = (values?.phase_num || "")
+              .split(",")
+              .map((p) => p.trim())
+              .filter(Boolean);
+            if (!phases || phases.length === 0) {
+              message.warning("请先选择期数");
+              return;
+            }
+            setCurrentRowId(record.id);
+            setSelectedPhases(phases);
+            setMachineryModalOpen(true);
+          }}
         >
           机械
         </Tag>,
         <Tag
           key="labor"
           style={{ width: "50px", cursor: "pointer", textAlign: "center" }}
+          onClick={() => {
+            const phases = (values?.phase_num || "")
+              .split(",")
+              .map((p) => p.trim())
+              .filter(Boolean);
+            if (!phases || phases.length === 0) {
+              message.warning("请先选择期数");
+              return;
+            }
+            setCurrentRowId(record.id);
+            setSelectedPhases(phases);
+            setLaborModalOpen(true);
+          }}
         >
           人工
         </Tag>,
         <Tag
           key="cost"
           style={{ width: "50px", cursor: "pointer", textAlign: "center" }}
+          onClick={() => {
+            const phases = (values?.phase_num || "")
+              .split(",")
+              .map((p) => p.trim())
+              .filter(Boolean);
+            if (!phases || phases.length === 0) {
+              message.warning("请先选择期数");
+              return;
+            }
+            setCurrentRowId(record.id);
+            setSelectedPhases(phases);
+            setCostModalOpen(true);
+          }}
         >
           费用
         </Tag>,
@@ -261,6 +322,7 @@ const ViewForm = (props) => {
                   message.warning("请先选择期数");
                   return;
                 }
+                setCurrentRowId(null);
                 setSelectedPhases(phases);
                 setMaterialModalOpen(true);
               }}
@@ -276,6 +338,7 @@ const ViewForm = (props) => {
                   message.warning("请先选择期数");
                   return;
                 }
+                setCurrentRowId(null);
                 setSelectedPhases(phases);
                 setMachineryModalOpen(true);
               }}
@@ -290,6 +353,7 @@ const ViewForm = (props) => {
                   message.warning("请先选择期数");
                   return;
                 }
+                setCurrentRowId(null);
                 setSelectedPhases(phases);
                 setLaborModalOpen(true);
               }}
@@ -304,6 +368,7 @@ const ViewForm = (props) => {
                   message.warning("请先选择期数");
                   return;
                 }
+                setCurrentRowId(null);
                 setSelectedPhases(phases);
                 setCostModalOpen(true);
               }}
@@ -336,41 +401,45 @@ const ViewForm = (props) => {
         open={materialModalOpen}
         onCancel={() => setMaterialModalOpen(false)}
         phases={selectedPhases}
-        materialData={materialData}
+        materialData={
+          currentRowId ? materialData[currentRowId] : globalMaterialData
+        }
         type="material"
         readonly={true}
         supplierList={suppliers}
-        supplierData={materialSupplierData}
+        supplierData={currentRowId ? materialSupplierData[currentRowId] : {}}
       />
       <MaterialModal
         open={machineryModalOpen}
         onCancel={() => setMachineryModalOpen(false)}
         phases={selectedPhases}
-        materialData={machineryData}
+        materialData={
+          currentRowId ? machineryData[currentRowId] : globalMachineryData
+        }
         type="machinery"
         readonly={true}
         supplierList={suppliers}
-        supplierData={machinerySupplierData}
+        supplierData={currentRowId ? machinerySupplierData[currentRowId] : {}}
       />
       <MaterialModal
         open={laborModalOpen}
         onCancel={() => setLaborModalOpen(false)}
         phases={selectedPhases}
-        materialData={laborData}
+        materialData={currentRowId ? laborData[currentRowId] : globalLaborData}
         type="labor"
         readonly={true}
         supplierList={suppliers}
-        supplierData={laborSupplierData}
+        supplierData={currentRowId ? laborSupplierData[currentRowId] : {}}
       />
       <MaterialModal
         open={costModalOpen}
         onCancel={() => setCostModalOpen(false)}
         phases={selectedPhases}
-        materialData={costData}
+        materialData={currentRowId ? costData[currentRowId] : globalCostData}
         type="cost"
         readonly={true}
         supplierList={suppliers}
-        supplierData={costSupplierData}
+        supplierData={currentRowId ? costSupplierData[currentRowId] : {}}
       />
     </>
   );
