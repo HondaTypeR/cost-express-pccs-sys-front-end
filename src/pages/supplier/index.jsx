@@ -65,7 +65,10 @@ const Supplier = () => {
         rowKey="key"
         search={false}
         toolBarRender={() => [
-          <CreateForm key="create" reload={actionRef.current?.reload} />,
+          <CreateForm
+            key="create"
+            reload={() => actionRef.current?.reload()}
+          />,
         ]}
         request={supplierList}
         columns={columns}

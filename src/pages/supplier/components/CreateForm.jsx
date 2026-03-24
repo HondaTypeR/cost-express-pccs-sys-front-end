@@ -25,16 +25,16 @@ const CreateForm = (props) => {
           </Button>
         }
         width="600px"
-        modalProps={{ destroyOnHidden: true }}
+        modalProps={{ destroyOnHidden: true, onCancel: () => setOpen(false) }}
         onFinish={async (value) => {
           const res = await supplierAdd(value);
           if (res.code === 200) {
-            messageApi.success(res.meg || "添加成功");
-            reload();
+            messageApi.success(res.msg || "添加成功");
+            reload?.();
             setOpen(false);
             return true;
           } else {
-            messageApi.error(res.meg || "添加失败，请重试");
+            messageApi.error(res.msg || "添加失败，请重试");
             return false;
           }
         }}

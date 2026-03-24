@@ -51,7 +51,11 @@ const CreateForm = (props) => {
           </Button>
         }
         width="600px"
-        modalProps={{ okButtonProps: { loading }, destroyOnClose: true }}
+        modalProps={{
+          okButtonProps: { loading },
+          destroyOnClose: true,
+          onCancel: () => setOpen(false),
+        }}
         onFinish={async (value) => {
           await run({
             ...value,
