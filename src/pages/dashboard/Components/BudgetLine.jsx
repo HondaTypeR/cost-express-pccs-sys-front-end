@@ -2,7 +2,7 @@ import { Chart } from "@antv/g2";
 import { useEffect, useRef } from "react";
 import { formatThousands } from "../helper";
 
-const BudgetLine = ({ data: propData }) => {
+const BudgetLine = ({ data: propData, height = 360 }) => {
   // 图表容器引用
   const chartRef2 = useRef(null);
   // 图表实例引用（用于销毁，防止内存泄漏）
@@ -37,7 +37,7 @@ const BudgetLine = ({ data: propData }) => {
     const chart = new Chart({
       container: chartRef2.current,
       autoFit: true,
-      height: 400,
+      height,
     });
 
     // 转换数据：使用传入数据，否则回退示例数据
@@ -95,7 +95,7 @@ const BudgetLine = ({ data: propData }) => {
     }
   }, [propData]);
 
-  return <div ref={chartRef2} style={{ width: "50%" }} />;
+  return <div ref={chartRef2} style={{ width: "100%", height }} />;
 };
 
 export default BudgetLine;

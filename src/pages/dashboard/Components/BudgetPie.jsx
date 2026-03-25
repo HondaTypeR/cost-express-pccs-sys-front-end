@@ -1,7 +1,7 @@
 import { findProjectCostPie } from "@/services/business";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 import { Chart } from "@antv/g2";
-import { Card, message } from "antd";
+import { Card, Col, message, Row } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { formatThousands } from "../helper";
 import BudgetLine from "./BudgetLine";
@@ -13,6 +13,7 @@ const BudgetPie = () => {
   const instanceRef = useRef(null);
   const [data, setData] = useState();
   const [summary, setSummary] = useState();
+  const HEIGHT = 360;
 
   useEffect(() => {
     findProjectCostPie({ params: { project_id: 8 } }).then((res) => {
@@ -36,57 +37,55 @@ const BudgetPie = () => {
   }, []);
 
   useEffect(() => {
-    // 防止重复创建
-    if (instanceRef.current) return;
+    // 初始化图表（仅一次）
+    if (!instanceRef.current) {
+      const chart = new Chart({
+        container: chartRef.current,
+        autoFit: true,
+        height: HEIGHT,
+      });
 
-    // 初始化图表
-    const chart = new Chart({
-      container: chartRef.current,
-      autoFit: true,
-    });
-
-    // 配置
-    chart.options({
-      type: "interval",
-      height: 400,
-      data: data,
-      coordinate: { type: "theta", innerRadius: 0.5, outerRadius: 0.8 },
-      transform: [{ type: "stackY" }],
-      encode: {
-        y: "percent",
-        color: "item",
-      },
-      legend: { color: { position: "bottom" } },
-      tooltip: {
-        title: (d) => d.item,
-        items: [
+      chart.options({
+        type: "interval",
+        height: HEIGHT,
+        data: [],
+        coordinate: { type: "theta", innerRadius: 0.5, outerRadius: 0.8 },
+        transform: [{ type: "stackY" }],
+        encode: { y: "percent", color: "item" },
+        legend: { color: { position: "right" } },
+        tooltip: {
+          title: (d) => d.item,
+          items: [
+            {
+              channel: "y",
+              name: "占比",
+              valueFormatter: (v) => `${(v * 100).toFixed(2)}%`,
+            },
+          ],
+        },
+        labels: [
           {
-            channel: "y",
-            name: "占比",
-            valueFormatter: (v) => `${(v * 100).toFixed(2)}%`,
+            text: (d) =>
+              Number(d.percent) > 0
+                ? `${d.item} ${(d.percent * 100).toFixed(2)}%`
+                : "",
+            position: "spider",
+            fontSize: 12,
           },
         ],
-      },
-      labels: [
-        {
-          text: (d) => `${d.item} ${(d.percent * 100).toFixed(2)}%`,
-          position: "spider",
-          fontSize: 12,
+        interaction: {
+          elementHoverScale: {
+            scale: 1.08,
+            shadow: true,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+            shadowBlur: 15,
+          },
         },
-      ],
-      interaction: {
-        elementHoverScale: {
-          scale: 1.08,
-          shadow: true,
-          shadowColor: "rgba(0, 0, 0, 0.5)",
-          shadowBlur: 15,
-        },
-      },
-    });
+      });
 
-    // 渲染
-    chart.render();
-    instanceRef.current = chart;
+      chart.render();
+      instanceRef.current = chart;
+    }
 
     // 组件销毁时销毁图表（重要！防止内存泄漏）
     return () => {
@@ -95,6 +94,18 @@ const BudgetPie = () => {
         instanceRef.current = null;
       }
     };
+  }, []);
+
+  // 数据更新时刷新图表数据
+  useEffect(() => {
+    if (!instanceRef.current) return;
+    const finalData = Array.isArray(data) ? data : [];
+    if (instanceRef.current.changeData) {
+      instanceRef.current.changeData(finalData);
+    } else {
+      instanceRef.current.options({ data: finalData });
+      instanceRef.current.render();
+    }
   }, [data]);
 
   return (
@@ -125,10 +136,14 @@ const BudgetPie = () => {
         </div>
       }
     >
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <div ref={chartRef} />
-        <BudgetLine data={data} />
-      </div>
+      <Row gutter={16} align="middle">
+        <Col xs={24} md={12}>
+          <div ref={chartRef} style={{ width: "100%", height: HEIGHT }} />
+        </Col>
+        <Col xs={24} md={12}>
+          <BudgetLine data={data} height={HEIGHT} />
+        </Col>
+      </Row>
     </Card>
   );
 };
