@@ -7,6 +7,7 @@ import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
 import ViewForm from "./components/ViewForm";
 import RelatedContentModal from "./components/RelatedContentModal";
+import SubContractCount from "./components/SubContractCount";
 
 const Contract = () => {
     const actionRef = useRef(null);
@@ -167,7 +168,7 @@ const Contract = () => {
         {
             title: "操作",
             valueType: "option",
-            width: 200,
+            width: 300,
             fixed: "right",
             render: (text, record) => [
                 <ViewForm
@@ -190,6 +191,14 @@ const Contract = () => {
                     contractId={record.contract_id}
                     trigger={<a>关联内容</a>}
                 />,
+                <a
+                    key="sub-contract"
+                    href={`/sub-contract-list?own_contract_id=${record.contract_id}&name=${record?.project_name}`}
+                    target="_blank"
+                    rel="noreferrer">
+                    补充合同
+                    <SubContractCount contract_id={record.contract_id} />
+                </a>,
                 <Popconfirm
                     title="确认删除"
                     description="确定要删除这条合同记录吗？删除后无法恢复。"

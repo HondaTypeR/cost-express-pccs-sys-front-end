@@ -70,6 +70,13 @@ export default [
     path: '/contract',
     component: './contract',
   },
+  {
+    name: '补充合同管理',
+    icon: 'DiffOutlined',
+    path: '/sub-contract-list',
+    hideInMenu: true,
+    component: './sub-contract',
+  },
    {
     name: '预算管理',
     icon: 'HighlightOutlined',

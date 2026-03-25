@@ -64,7 +64,7 @@ const MaterialManagement = () => {
     if (res.code === 200) {
       setContracts(
         res.data.map((item) => ({
-          value: item.contract_id,
+          value: String(item.contract_id),
           label: `${item.project_name} (${item.contract_id})`,
           ...item,
         }))

@@ -1,5 +1,6 @@
 import { PhaseNum } from "@/enum";
 import { updateMechanical } from "@/services/business";
+import { subListContract } from "@/services/contract";
 import {
   DrawerForm,
   ProFormDigit,
@@ -19,6 +20,8 @@ const UpdateForm = (props) => {
   const [unitPrice, setUnitPrice] = useState(values.unit_price || 0);
   const [totalPrice, setTotalPrice] = useState(values.total_price || 0);
   const [imgPreview, setImgPreview] = useState({ visible: false, src: "" });
+  const [subContracts, setSubContracts] = useState([]);
+  const [subContractMap, setSubContractMap] = useState({});
 
   useEffect(() => {
     if (open) {
@@ -30,6 +33,36 @@ const UpdateForm = (props) => {
       });
     }
   }, [open, values]);
+
+  // 打开编辑抽屉时，如果已有关联合同，预加载其补充合同列表
+  useEffect(() => {
+    const loadSubs = async () => {
+      try {
+        setSubContracts([]);
+        setSubContractMap({});
+        if (open && values?.related_contract) {
+          const res = await subListContract({
+            own_contract_id: values.related_contract,
+          });
+          const list = res?.data || [];
+          const options = list.map((item) => ({
+            value: String(item.sub_contract_id),
+            label: item.project_name || String(item.sub_contract_id),
+          }));
+          setSubContracts(options);
+          const map = {};
+          list.forEach((it) => {
+            map[String(it.sub_contract_id)] = it;
+          });
+          setSubContractMap(map);
+        }
+      } catch (e) {
+        setSubContracts([]);
+        setSubContractMap({});
+      }
+    };
+    loadSubs();
+  }, [open, values?.related_contract]);
 
   // 计算合价
   const calculateTotalPrice = (qty, price) => {
@@ -93,8 +126,9 @@ const UpdateForm = (props) => {
         }}
         initialValues={{
           ...values,
-          related_contract: values.related_contract
-            ? Number(values.related_contract)
+          related_contract: values.related_contract,
+          related_sub_contract: values.related_sub_contract
+            ? String(values.related_sub_contract)
             : undefined,
           acceptance_note: (() => {
             const files = parseAcceptanceNote(values.acceptance_note);
@@ -165,7 +199,17 @@ const UpdateForm = (props) => {
             showSearch: true,
             filterOption: (input, option) =>
               (option?.label ?? "").toLowerCase().includes(input.toLowerCase()),
-            onChange: (value) => {
+            onChange: async (value) => {
+              // 清空/更换关联合同时，先清空补充合同
+              if (!value) {
+                setSubContracts([]);
+                setSubContractMap({});
+                formRef.current?.setFieldsValue({
+                  related_sub_contract: undefined,
+                });
+                return;
+              }
+
               const selectedContract = contracts?.find(
                 (c) => c.value === value
               );
@@ -173,7 +217,57 @@ const UpdateForm = (props) => {
                 formRef.current?.setFieldsValue({
                   supplier_unit: Number(selectedContract.party_b_id),
                   phase_num: selectedContract.term,
-                  material_name: selectedContract.machinery_name,
+                  material_name:
+                    selectedContract.machinery_name ??
+                    selectedContract.material_name ??
+                    selectedContract.people_name,
+                  related_sub_contract: undefined,
+                });
+              }
+
+              // 加载该主合同的补充合同
+              try {
+                setSubContracts([]);
+                setSubContractMap({});
+                const res = await subListContract({ own_contract_id: value });
+                const list = res?.data || [];
+                const options = list.map((item) => ({
+                  value: String(item.sub_contract_id),
+                  label: item.project_name || String(item.sub_contract_id),
+                }));
+                setSubContracts(options);
+                const map = {};
+                list.forEach((it) => {
+                  map[String(it.sub_contract_id)] = it;
+                });
+                setSubContractMap(map);
+              } catch (e) {
+                setSubContracts([]);
+                setSubContractMap({});
+              }
+            },
+          }}
+        />
+        <ProFormSelect
+          name="related_sub_contract"
+          label="关联补充合同"
+          placeholder="请选择关联补充合同"
+          options={subContracts}
+          fieldProps={{
+            showSearch: true,
+            filterOption: (input, option) =>
+              (option?.label ?? "").toLowerCase().includes(input.toLowerCase()),
+            onChange: (value) => {
+              const sc = subContractMap?.[value];
+              if (sc) {
+                const name =
+                  sc.machinery_name ?? sc.material_name ?? sc.people_name;
+                formRef.current?.setFieldsValue({
+                  supplier_unit: sc.party_b_id
+                    ? Number(sc.party_b_id)
+                    : undefined,
+                  phase_num: sc.term,
+                  material_name: name,
                 });
               }
             },

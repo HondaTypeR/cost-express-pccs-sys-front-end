@@ -1,4 +1,5 @@
 import { AuditStatus, PhaseNum, WaitStatus } from "@/enum";
+import { subListContract } from "@/services/contract";
 import {
   DrawerForm,
   ProFormDigit,
@@ -8,13 +9,14 @@ import {
   ProFormUploadButton,
 } from "@ant-design/pro-components";
 import { Image } from "antd";
-import { cloneElement, useRef, useState } from "react";
+import { cloneElement, useEffect, useRef, useState } from "react";
 
 const ViewForm = (props) => {
   const { values, trigger, projects, suppliers, contracts, users } = props;
   const formRef = useRef();
   const [open, setOpen] = useState(false);
   const [imgPreview, setImgPreview] = useState({ visible: false, src: "" });
+  const [subContracts, setSubContracts] = useState([]);
 
   const parseAcceptanceNote = (raw) => {
     if (!raw) return [];
@@ -31,6 +33,29 @@ const ViewForm = (props) => {
       return [];
     }
   };
+
+  // 打开抽屉时，根据关联合同加载“关联补充合同”的只读选项，便于展示label
+  useEffect(() => {
+    const loadSubs = async () => {
+      try {
+        setSubContracts([]);
+        if (open && values?.related_contract) {
+          if (!values?.related_contract) return;
+          const res = await subListContract({
+            own_contract_id: values?.related_contract,
+          });
+          const options = (res?.data || []).map((item) => ({
+            value: String(item.sub_contract_id),
+            label: item.project_name || String(item.sub_contract_id),
+          }));
+          setSubContracts(options);
+        }
+      } catch (e) {
+        setSubContracts([]);
+      }
+    };
+    loadSubs();
+  }, [open, values?.related_contract]);
 
   return (
     <>
@@ -50,19 +75,6 @@ const ViewForm = (props) => {
         }}
         initialValues={{
           ...values,
-          related_contract: (() => {
-            if (!values.related_contract) return [];
-            try {
-              // 尝试解析 JSON 数组格式，如 "[4,3]"
-              const parsed = JSON.parse(values.related_contract);
-              return Array.isArray(parsed) ? parsed : [];
-            } catch {
-              // 如果不是 JSON，按逗号分隔的字符串处理
-              return values.related_contract
-                .split(",")
-                .map((id) => Number(id.trim()));
-            }
-          })(),
           acceptance_note: (() => {
             const files = parseAcceptanceNote(values.acceptance_note);
             return files.map((f, idx) => ({
@@ -131,8 +143,14 @@ const ViewForm = (props) => {
         <ProFormSelect
           name="related_contract"
           label="关联合同"
-          mode="multiple"
           options={contracts}
+          readonly
+        />
+        {/* 读取并展示关联合同的补充合同（只读） */}
+        <ProFormSelect
+          name="related_sub_contract"
+          label="关联补充合同"
+          options={subContracts}
           readonly
         />
         <ProFormSelect

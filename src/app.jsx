@@ -15,7 +15,6 @@ import {
   TransactionOutlined,
   UsergroupDeleteOutlined,
 } from "@ant-design/icons";
-import { SettingDrawer } from "@ant-design/pro-components";
 import "@ant-design/v5-patch-for-react-19";
 import { history } from "@umijs/max";
 import defaultSettings from "../config/defaultSettings";
@@ -104,7 +103,11 @@ export const layout = ({ initialState, setInitialState }) => {
     menu: {
       params: initialState,
       request: async () => {
-        return initialState?.menuData || [];
+        return (
+          initialState?.menuData?.filter(
+            (item) => item?.path !== "/sub-contract-list"
+          ) || []
+        );
       },
       locale: false, // 禁用国际化
     },
@@ -195,7 +198,7 @@ export const layout = ({ initialState, setInitialState }) => {
       return (
         <>
           {children}
-          {isDev && (
+          {/* {isDev && (
             <SettingDrawer
               disableUrlParams
               enableDarkTheme
@@ -207,7 +210,7 @@ export const layout = ({ initialState, setInitialState }) => {
                 }));
               }}
             />
-          )}
+          )} */}
         </>
       );
     },

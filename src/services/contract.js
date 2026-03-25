@@ -49,3 +49,58 @@ export async function deleteContract(body, options) {
         ...(options || {}),
     });
 }
+
+// 获取子合同相关
+export async function subListContract(body, options) {
+    return request('/api/sub/contract/list', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+export async function getSubContractRelated(body, options) {
+    return request(`/api/sub/contract/getRelatedData`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+
+export async function subAddContract(body, options) {
+    return request('/api/sub/contract/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+
+export async function subUpdateContract(body, options) {
+    return request('/api/sub/contract/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+
+export async function subDeleteContract(body, options) {
+    return request('/api/sub/contract/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
