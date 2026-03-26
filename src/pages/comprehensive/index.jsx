@@ -475,6 +475,9 @@ const Comprehensive = () => {
         >
           <Button>选择文件</Button>
         </Upload>
+        <a href="http://101.37.231.212:3000/uploads/temp/%E9%A2%84%E7%AE%97%E6%A8%A1%E7%89%88.xlsx">
+          下载上传模板
+        </a>
         <div style={{ marginTop: 8, color: "rgba(0,0,0,.45)" }}>
           仅支持 .xls / .xlsx，单次仅上传一个文件。
         </div>
