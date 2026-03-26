@@ -92,7 +92,7 @@ export default [
     {
     name: '机械管理',
     icon: 'DeploymentUnitOutlined',
-    path: '//mechanicalManagement',
+    path: '/mechanicalManagement',
     component: './mechanicalManagement',
   },
   {
@@ -106,6 +106,12 @@ export default [
     icon: 'PropertySafetyOutlined',
     path: '/financeManagement',
     component: './financeManagement',
+  },
+  {
+    name: '工作台',
+    icon: 'DeploymentUnitOutlined',
+    path: '/workbench',
+    component: './welcome/DataCenter',
   },
   
   {
