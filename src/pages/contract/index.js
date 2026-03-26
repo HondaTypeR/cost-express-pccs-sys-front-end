@@ -7,7 +7,6 @@ import CreateForm from "./components/CreateForm";
 import UpdateForm from "./components/UpdateForm";
 import ViewForm from "./components/ViewForm";
 import RelatedContentModal from "./components/RelatedContentModal";
-import SubContractCount from "./components/SubContractCount";
 
 const Contract = () => {
     const actionRef = useRef(null);
@@ -196,8 +195,7 @@ const Contract = () => {
                     href={`/sub-contract-list?own_contract_id=${record.contract_id}&name=${record?.project_name}`}
                     target="_blank"
                     rel="noreferrer">
-                    补充合同
-                    <SubContractCount contract_id={record.contract_id} />
+                    补充合同({record.sub_contract_count || 0})
                 </a>,
                 <Popconfirm
                     title="确认删除"

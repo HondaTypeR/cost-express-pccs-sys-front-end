@@ -16,7 +16,7 @@ const BudgetPie = () => {
   const HEIGHT = 360;
 
   useEffect(() => {
-    findProjectCostPie({ params: { project_id: 8 } }).then((res) => {
+    findProjectCostPie({ params: { project_id: 1 } }).then((res) => {
       if (res?.code === 200) {
         const newData = [];
         res?.data?.items?.forEach((item) => {
