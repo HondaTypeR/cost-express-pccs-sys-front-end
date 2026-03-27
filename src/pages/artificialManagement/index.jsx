@@ -365,7 +365,9 @@ const MaterialManagement = () => {
               okText="确认"
               cancelText="取消"
             >
-              <a key="delete">删除</a>
+              <a key="delete" style={{ color: "red" }}>
+                删除
+              </a>
             </Popconfirm>
           );
         }

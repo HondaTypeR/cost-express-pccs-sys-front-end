@@ -216,6 +216,7 @@ const Contract = () => {
                 >
                     <a
                         key="delete"
+                        style={{ color: "red" }}
                     >
                         删除
                     </a>

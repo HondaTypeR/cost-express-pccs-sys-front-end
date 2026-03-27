@@ -512,6 +512,9 @@ const UpdateForm = (props) => {
             name="land_area"
             colProps={{ span: 12 }}
             disabled
+            fieldProps={{
+              suffix: "m²",
+            }}
           />
           <ProFormText
             label="容积率"
@@ -524,30 +527,45 @@ const UpdateForm = (props) => {
             name="total_building_area"
             colProps={{ span: 12 }}
             disabled
+            fieldProps={{
+              suffix: "m²",
+            }}
           />
           <ProFormText
             label="住宅面积"
             name="residential_area"
             colProps={{ span: 12 }}
             disabled
+            fieldProps={{
+              suffix: "m²",
+            }}
           />
           <ProFormText
             label="商铺面积"
             name="shop_area"
             colProps={{ span: 12 }}
             disabled
+            fieldProps={{
+              suffix: "m²",
+            }}
           />
           <ProFormText
             label="地下室面积"
             name="basement_area"
             colProps={{ span: 12 }}
             disabled
+            fieldProps={{
+              suffix: "m²",
+            }}
           />
           <ProFormText
             label="公共面积"
             name="public_area"
             colProps={{ span: 12 }}
             disabled
+            fieldProps={{
+              suffix: "m²",
+            }}
           />
           <ProFormText
             label="项目内容"
