@@ -84,9 +84,7 @@ export async function getInitialState() {
     return {
       fetchUserInfo,
       currentUser,
-      menuData: menuData?.filter(
-        (item) => !["/welcome", "/power"].includes(item.path)
-      ),
+      menuData: menuData?.filter((item) => !["/power"].includes(item.path)),
       settings: defaultSettings,
     };
   }
@@ -140,7 +138,6 @@ export const layout = ({ initialState, setInitialState }) => {
           "/user/register",
           "/user/register-result",
           "/",
-          "/welcome",
           "/403",
         ];
 
