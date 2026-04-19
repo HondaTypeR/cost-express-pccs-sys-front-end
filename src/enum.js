@@ -17,7 +17,6 @@ export const Departments = [
     { label: "成本部", value: '1' },
     { label: "工程部", value: '2' },
     { label: "销售部", value: '3' },
-    { label: "采购部", value: '4' },
 ]
 
 export const Roles = [

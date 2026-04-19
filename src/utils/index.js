@@ -4,3 +4,5 @@ export function getUrlParam(key) {
     const params = new URLSearchParams(window.location.search);
     return params.get(key); // 返回对应值，没有则返回 null
 }
+
+export { checkPower } from './checkPower';

@@ -14,6 +14,7 @@ import {
 } from "@/services/business";
 import { supplierList } from "@/services/supplier";
 import { fetchUser } from "@/services/user";
+import { checkPower } from "@/utils";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
 import { useModel } from "@umijs/max";
 import { Button, message, Popconfirm } from "antd";
@@ -26,6 +27,9 @@ import ReviewApprovalModal from "./Components/ReviewApprovalModal";
 import UpdateForm from "./Components/UpdateForm";
 import ViewForm from "./Components/ViewForm";
 
+const DEPT = "工程部";
+const POWER = "机械确认单";
+
 const MaterialManagement = () => {
   const { initialState } = useModel("@@initialState");
   const currentUser = initialState?.currentUser;
@@ -34,6 +38,24 @@ const MaterialManagement = () => {
   const [suppliers, setSuppliers] = useState([]);
   const [contracts, setContracts] = useState([]);
   const [users, setUsers] = useState([]);
+  const [canCreate, setCanCreate] = useState(false);
+  const [canReview, setCanReview] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (!currentUser?.id) return;
+      const ok = await checkPower(`${DEPT}-${POWER}-${currentUser.id}`, 1);
+      setCanCreate(ok);
+    })();
+  }, [currentUser?.id]);
+
+  useEffect(() => {
+    (async () => {
+      if (!currentUser?.id) return;
+      const ok = await checkPower(`${DEPT}-${POWER}-${currentUser.id}`, 2);
+      setCanReview(ok);
+    })();
+  }, [currentUser?.id]);
 
   const fetchProjects = async () => {
     const res = await listProject();
@@ -284,8 +306,12 @@ const MaterialManagement = () => {
           />
         );
 
-        // 只有状态为草稿时且当前登录用户是经办人时，显示编辑、删除和发起审批按钮
-        if (record.document_status === 0 && currentUser?.id == record.handler) {
+        // 只有状态为草稿时且当前登录用户是经办人时，且有权限，显示编辑、删除和发起审批按钮
+        if (
+          record.document_status === 0 &&
+          currentUser?.id == record.handler &&
+          canCreate
+        ) {
           actions.push(
             <UpdateForm
               key="edit"
@@ -302,6 +328,10 @@ const MaterialManagement = () => {
           actions.push(
             <ApprovalModal
               key="approval"
+              dept={DEPT}
+              power={POWER}
+              level={2}
+              currentUser={currentUser}
               trigger={<a>发起审批</a>}
               users={users}
               currentStatus={record.document_status}
@@ -365,10 +395,11 @@ const MaterialManagement = () => {
           );
         }
 
-        // 如果审核状态是待审核且单据状态是复核审核中，且当前用户是审批人，显示复审审批按钮
+        // 如果审核状态是待审核且单据状态是复核审核中，且当前用户是审批人，且有权限，显示复审审批按钮
         if (
           record.document_status === 1 &&
-          record.reviewer == currentUser?.id
+          record.reviewer == currentUser?.id &&
+          canReview
         ) {
           actions.push(
             <ReviewApprovalModal
@@ -507,18 +538,20 @@ const MaterialManagement = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <CreateForm
-            key="create"
-            onOk={() => actionRef.current?.reload()}
-            trigger={
-              <Button type="primary" key="primary">
-                新建机械
-              </Button>
-            }
-            projects={projects}
-            suppliers={suppliers}
-            contracts={contracts}
-          />,
+          canCreate && (
+            <CreateForm
+              key="create"
+              onOk={() => actionRef.current?.reload()}
+              trigger={
+                <Button type="primary" key="primary">
+                  新建机械
+                </Button>
+              }
+              projects={projects}
+              suppliers={suppliers}
+              contracts={contracts}
+            />
+          ),
         ]}
         request={async (params, sort, filter) => {
           const res = await listMechanical({

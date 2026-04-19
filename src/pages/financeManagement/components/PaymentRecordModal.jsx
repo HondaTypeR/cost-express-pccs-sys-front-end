@@ -16,7 +16,8 @@ import ReviewApprovalModal from "./ReviewApprovalModal";
 import ReviewLogModal from "./ReviewLogModal";
 
 const PaymentRecordModal = (props) => {
-  const { trigger, records, users, currentUser, onRefresh } = props;
+  const { trigger, records, users, currentUser, onRefresh, currentInfo } =
+    props;
   const [open, setOpen] = useState(false);
 
   const columns = [
@@ -81,6 +82,7 @@ const PaymentRecordModal = (props) => {
           actions.push(
             <ApprovalModal
               key="approval"
+              currentInfo={currentInfo}
               trigger={<a>发起审批</a>}
               users={users}
               currentStatus={record.document_status}
@@ -133,6 +135,7 @@ const PaymentRecordModal = (props) => {
               key="handler-dept-approval"
               trigger={<a>审批</a>}
               users={users}
+              currentInfo={currentInfo}
               currentAmount={record.total_amount}
               nextApproverLabel="财务部审批人"
               onOk={async (
@@ -206,6 +209,8 @@ const PaymentRecordModal = (props) => {
               key="finance-approval"
               trigger={<a>审批</a>}
               users={users}
+              currentInfo={currentInfo}
+              checkerLevel={4}
               currentAmount={record.total_amount}
               nextApproverLabel="复核审批人"
               onOk={async (
@@ -279,6 +284,7 @@ const PaymentRecordModal = (props) => {
               key="rechecker-approval"
               trigger={<a>审批</a>}
               users={users}
+              fixedChecker={999}
               currentAmount={record.total_amount}
               nextApproverLabel="终审审批人"
               onOk={async (

@@ -1,3 +1,4 @@
+import { getDeptList } from "@/services/dept";
 import {
   ModalForm,
   ProFormDigit,
@@ -6,7 +7,7 @@ import {
   ProFormTextArea,
 } from "@ant-design/pro-components";
 import { message } from "antd";
-import { cloneElement, useRef, useState } from "react";
+import { cloneElement, useEffect, useRef, useState } from "react";
 
 const ReviewApprovalModal = (props) => {
   const {
@@ -15,10 +16,41 @@ const ReviewApprovalModal = (props) => {
     onOk,
     nextApproverLabel = "下一级审批人",
     currentAmount,
+    currentInfo,
+    checkerLevel = 3,
+    fixedChecker,
   } = props;
   const formRef = useRef();
   const [open, setOpen] = useState(false);
   const [approvalStatus, setApprovalStatus] = useState(1); // 1: 通过, 2: 拒绝
+
+  useEffect(() => {
+    if (!open) return;
+    if (fixedChecker != null) {
+      setTimeout(() => {
+        formRef.current?.setFieldValue("next_checker", fixedChecker);
+      }, 0);
+      return;
+    }
+    if (!currentInfo) return;
+    (async () => {
+      const deptName =
+        currentInfo.data_type === "material" ? "成本部" : "工程部";
+      const res = await getDeptList();
+      if (res?.code !== 200) return;
+      const matched = (res.data || []).find(
+        (item) => item.dept_name === deptName && item.power === "结算付款审批单"
+      );
+      const checkerField = `level_${
+        ["one", "two", "three", "four", "five"][checkerLevel - 1]
+      }_checker`;
+      if (!matched || !matched[checkerField]) return;
+      formRef.current?.setFieldValue(
+        "next_checker",
+        Number(matched[checkerField])
+      );
+    })();
+  }, [open, currentInfo, users, checkerLevel, fixedChecker]);
 
   return (
     <ModalForm
@@ -107,11 +139,8 @@ const ReviewApprovalModal = (props) => {
               },
             ]}
             fieldProps={{
-              showSearch: true,
-              filterOption: (input, option) =>
-                (option?.label ?? "")
-                  .toLowerCase()
-                  .includes(input.toLowerCase()),
+              showSearch: false,
+              disabled: true,
             }}
           />
           <ProFormTextArea

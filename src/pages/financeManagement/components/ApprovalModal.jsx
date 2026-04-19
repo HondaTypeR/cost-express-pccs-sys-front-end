@@ -1,15 +1,35 @@
+import { getDeptList } from "@/services/dept";
 import {
   ModalForm,
   ProFormDigit,
   ProFormSelect,
 } from "@ant-design/pro-components";
 import { message } from "antd";
-import { cloneElement, useRef, useState } from "react";
+import { cloneElement, useEffect, useRef, useState } from "react";
 
 const ApprovalModal = (props) => {
-  const { trigger, users, onOk, currentStatus, currentAmount } = props;
+  const { trigger, users, onOk, currentStatus, currentAmount, currentInfo } =
+    props;
   const formRef = useRef();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open || !currentInfo) return;
+    (async () => {
+      const deptName =
+        currentInfo.data_type === "material" ? "成本部" : "工程部";
+      const res = await getDeptList();
+      if (res?.code !== 200) return;
+      const matched = (res.data || []).find(
+        (item) => item.dept_name === deptName && item.power === "结算付款审批单"
+      );
+      if (!matched || !matched.level_two_checker) return;
+      formRef.current?.setFieldValue(
+        "reviewer",
+        Number(matched.level_two_checker)
+      );
+    })();
+  }, [open, currentInfo, users]);
 
   return (
     <ModalForm
@@ -53,9 +73,8 @@ const ApprovalModal = (props) => {
           },
         ]}
         fieldProps={{
-          showSearch: true,
-          filterOption: (input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase()),
+          showSearch: false,
+          disabled: true,
         }}
       />
       <ProFormDigit

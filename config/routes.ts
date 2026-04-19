@@ -28,6 +28,12 @@ export default [
     path: '/welcome',
     component: './welcome',
   },
+    {
+    name: '部门管理',
+    icon: 'SmileOutlined',
+    path: '/dept',
+    component: './dept',
+  },
   {
     name: '数据看板',
     icon: 'DashboardOutlined',

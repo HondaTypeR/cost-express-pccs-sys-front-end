@@ -102,11 +102,7 @@ const UpdateForm = (props) => {
           placeholder="请输入名称"
           rules={[{ required: true, message: "请输入名称" }]}
         />
-        <ProFormText
-          name="spec_model"
-          label="规格型号"
-          placeholder="请输入规格型号"
-        />
+        <ProFormText name="spec_model" label="编号" placeholder="请输入编号" />
         <ProFormText name="unit" label="单位" placeholder="请输入单位" />
         <ProFormDigit
           name="quantity"
@@ -115,15 +111,29 @@ const UpdateForm = (props) => {
           rules={[{ required: true, message: "请输入数量" }]}
         />
         <ProFormDigit
-          name="budget_unit_price"
-          label="预算单价"
-          placeholder="请输入预算单价"
+          name="market_price"
+          label="市场价"
+          placeholder="请输入市场价"
+          fieldProps={{ precision: 2 }}
+          rules={[{ required: true, message: "请输入市场价" }]}
+        />
+        <ProFormDigit
+          name="budget_price"
+          label="预算价"
+          placeholder="请输入预算价"
+          fieldProps={{ precision: 2 }}
+          rules={[{ required: true, message: "请输入预算价" }]}
+        />
+        <ProFormDigit
+          name="spread"
+          label="价差"
+          placeholder="请输入价差"
           fieldProps={{ precision: 2 }}
         />
         <ProFormDigit
-          name="budget_total_price"
-          label="预算总价"
-          placeholder="请输入预算总价"
+          name="change_spread"
+          label="调差金额"
+          placeholder="请输入调差金额"
           fieldProps={{ precision: 2 }}
         />
       </DrawerForm>

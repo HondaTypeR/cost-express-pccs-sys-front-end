@@ -71,6 +71,7 @@ const ReviewApprovalModal = (props) => {
           name="user_id"
           label="审核人"
           placeholder="请选择审核人"
+          initialValue={999}
           options={users}
           rules={[
             {
@@ -80,6 +81,7 @@ const ReviewApprovalModal = (props) => {
           ]}
           fieldProps={{
             showSearch: true,
+            disabled: true,
             filterOption: (input, option) =>
               (option?.label ?? "").toLowerCase().includes(input.toLowerCase()),
           }}

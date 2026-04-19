@@ -1,11 +1,34 @@
+import { getDeptList } from "@/services/dept";
 import { ModalForm, ProFormSelect } from "@ant-design/pro-components";
 import { message } from "antd";
-import { cloneElement, useRef, useState } from "react";
+import { cloneElement, useEffect, useRef, useState } from "react";
+
+const CHECKER_FIELDS = [
+  "level_one_checker",
+  "level_two_checker",
+  "level_three_checker",
+  "level_four_checker",
+  "level_five_checker",
+];
 
 const ApprovalModal = (props) => {
-  const { trigger, users, onOk, currentStatus } = props;
+  const { trigger, users, onOk, currentStatus, dept, power, level } = props;
   const formRef = useRef();
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open || !dept || !power || !level) return;
+    (async () => {
+      const res = await getDeptList();
+      if (res?.code !== 200) return;
+      const field = CHECKER_FIELDS[level - 1];
+      const matched = (res.data || []).find(
+        (item) => item.dept_name === dept && item.power === power
+      );
+      if (!matched || !matched[field]) return;
+      formRef.current?.setFieldValue("reviewer", Number(matched[field]));
+    })();
+  }, [open, dept, power, level, users]);
 
   return (
     <ModalForm
@@ -25,7 +48,7 @@ const ApprovalModal = (props) => {
           message.error("请选择审批人");
           return false;
         }
-        
+
         const success = await onOk?.(values.reviewer);
         if (success) {
           setOpen(false);
@@ -46,9 +69,8 @@ const ApprovalModal = (props) => {
           },
         ]}
         fieldProps={{
-          showSearch: true,
-          filterOption: (input, option) =>
-            (option?.label ?? "").toLowerCase().includes(input.toLowerCase()),
+          showSearch: false,
+          disabled: true,
         }}
       />
       <div style={{ color: "#666", fontSize: 12, marginTop: -16 }}>

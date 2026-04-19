@@ -9,6 +9,7 @@ import {
   HighlightOutlined,
   PropertySafetyOutlined,
   SafetyOutlined,
+  SmileOutlined,
   SnippetsOutlined,
   TableOutlined,
   TeamOutlined,
@@ -37,6 +38,7 @@ const iconMap = {
   DropboxOutlined: <DropboxOutlined />,
   PropertySafetyOutlined: <PropertySafetyOutlined />,
   DashboardOutlined: <DashboardOutlined />,
+  SmileOutlined: <SmileOutlined />,
 };
 
 /**

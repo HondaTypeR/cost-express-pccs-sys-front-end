@@ -5,6 +5,7 @@ import {
 } from "@/services/business";
 import { supplierList } from "@/services/supplier";
 import { fetchUser } from "@/services/user";
+import { checkPower } from "@/utils";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
 import { useModel } from "@umijs/max";
 import { message } from "antd";
@@ -20,6 +21,23 @@ const FinanceManagement = () => {
   const [projects, setProjects] = useState([]);
   const [allProcessRecord, setAllProcessRecord] = useState([]);
   const [users, setUsers] = useState([]);
+  const [canMaterial, setCanMaterial] = useState(false);
+  const [canMechanical, setCanMechanical] = useState(false);
+  const [canArtificial, setCanArtificial] = useState(false);
+
+  useEffect(() => {
+    (async () => {
+      if (!currentUser?.id) return;
+      const [m, me, a] = await Promise.all([
+        checkPower(`成本部-材料确认单-${currentUser.id}`, 1),
+        checkPower(`工程部-机械确认单-${currentUser.id}`, 1),
+        checkPower(`工程部-人工确认单-${currentUser.id}`, 1),
+      ]);
+      setCanMaterial(m);
+      setCanMechanical(me);
+      setCanArtificial(a);
+    })();
+  }, [currentUser?.id]);
 
   const fetchProcessRecord = async () => {
     const res = await listProcessRecord();
@@ -230,6 +248,7 @@ const FinanceManagement = () => {
           <PaymentRecordModal
             trigger={<a>{count}</a>}
             records={relatedRecords}
+            currentInfo={record}
             users={users}
             currentUser={currentUser}
             onRefresh={() => {
@@ -248,17 +267,23 @@ const FinanceManagement = () => {
       render: (text, record) => {
         const actions = [];
         if (record.wait_account_paid > 0) {
-          actions.push(
-            <PaymentModal
-              key="payment"
-              record={record}
-              onOk={() => {
-                fetchProcessRecord();
-                actionRef.current?.reload();
-              }}
-              trigger={<a>创建付款单</a>}
-            />
-          );
+          const canCreate =
+            (record.data_type === "material" && canMaterial) ||
+            (record.data_type === "mechanical" && canMechanical) ||
+            (record.data_type === "artificial" && canArtificial);
+          if (canCreate) {
+            actions.push(
+              <PaymentModal
+                key="payment"
+                record={record}
+                onOk={() => {
+                  fetchProcessRecord();
+                  actionRef.current?.reload();
+                }}
+                trigger={<a>创建付款单</a>}
+              />
+            );
+          }
         }
 
         return actions;
@@ -281,8 +306,20 @@ const FinanceManagement = () => {
           const { current, pageSize, ...queryParams } = params;
           const res = await allListMaterials(queryParams);
           if (res.code === 200) {
+            const userId = currentUser?.id;
+            const ownerDept = currentUser?.owner_dept;
+            const filterList = (res.data.list || []).filter((item) => {
+              if (userId == 1 || userId == 999) return true;
+              if (ownerDept == 1) return item.data_type === "material";
+              if (ownerDept == 2)
+                return (
+                  item.data_type === "mechanical" ||
+                  item.data_type === "artificial"
+                );
+              return true;
+            });
             return {
-              data: res.data.list || [],
+              data: filterList,
               success: true,
               total: res.data.summary?.totalCount || 0,
             };

@@ -210,7 +210,7 @@ const Comprehensive = () => {
       dataIndex: "name",
     },
     {
-      title: "规格型号",
+      title: "编号",
       dataIndex: "spec_model",
     },
     {
@@ -224,13 +224,23 @@ const Comprehensive = () => {
       hideInSearch: true,
     },
     {
-      title: "预算单价",
-      dataIndex: "budget_unit_price",
+      title: "市场价",
+      dataIndex: "market_price",
       hideInSearch: true,
     },
     {
-      title: "预算总价",
-      dataIndex: "budget_total_price",
+      title: "预算价",
+      dataIndex: "budget_price",
+      hideInSearch: true,
+    },
+    {
+      title: "价差",
+      dataIndex: "spread",
+      hideInSearch: true,
+    },
+    {
+      title: "调差金额",
+      dataIndex: "change_spread",
       hideInSearch: true,
     },
     {

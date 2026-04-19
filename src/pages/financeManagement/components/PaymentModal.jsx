@@ -73,7 +73,10 @@ const PaymentModal = (props) => {
             (sum, item) => sum + (Number(item.amount) || 0),
             0
           );
-
+          if (paymentItems?.length === 0) {
+            message.error("请补充付款明细");
+            return false;
+          }
           // Create process record
           const processRes = await addProcessRecord({
             relation_id: record.code,
