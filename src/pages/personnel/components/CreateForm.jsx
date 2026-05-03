@@ -137,6 +137,16 @@ const CreateForm = (props) => {
           ]}
           placeholder="请选择角色"
         />
+        <ProFormText
+          label="开户银行"
+          name="bankCardName"
+          placeholder="请输入开户银行"
+        />
+        <ProFormText
+          label="银行卡号"
+          name="bankCardNo"
+          placeholder="请输入银行卡号"
+        />
       </ModalForm>
     </>
   );

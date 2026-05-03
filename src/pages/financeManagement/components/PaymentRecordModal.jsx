@@ -9,6 +9,7 @@ import {
 } from "@/services/business";
 import { ProTable } from "@ant-design/pro-components";
 import { message, Modal } from "antd";
+import dayjs from "dayjs";
 import { cloneElement, useState } from "react";
 import ApprovalModal from "./ApprovalModal";
 import FinalApprovalModal from "./FinalApprovalModal";
@@ -98,6 +99,7 @@ const PaymentRecordModal = (props) => {
                   level_one_reviewer: currentUser?.username,
                   level_one_review_status: "发起审批",
                   level_one_review_remark: "-",
+                  level_one_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                   level_two_reviewer: users.find((u) => u.value === reviewerId)
                     ?.label,
                   level_two_review_status: "待审批",
@@ -156,6 +158,7 @@ const PaymentRecordModal = (props) => {
                       id: logId,
                       level_two_review_status: "审批通过",
                       level_two_review_remark: approvalOpinion,
+                      level_two_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                       level_three_reviewer: users.find(
                         (u) => u.value === nextChecker
                       )?.label,
@@ -175,6 +178,7 @@ const PaymentRecordModal = (props) => {
                       id: logId,
                       level_two_review_status: "审批驳回",
                       level_two_review_remark: rejectReason,
+                      level_two_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                     });
                   }
                   // 审批拒绝
@@ -231,6 +235,7 @@ const PaymentRecordModal = (props) => {
                       id: logId,
                       level_three_review_status: "审批通过",
                       level_three_review_remark: approvalOpinion,
+                      level_three_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                       level_four_reviewer: users.find(
                         (u) => u.value === nextChecker
                       )?.label,
@@ -250,6 +255,7 @@ const PaymentRecordModal = (props) => {
                       id: logId,
                       level_three_review_status: "审批驳回",
                       level_three_review_remark: rejectReason,
+                      level_three_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                     });
                   }
                   // 审批拒绝
@@ -305,6 +311,7 @@ const PaymentRecordModal = (props) => {
                       id: logId,
                       level_four_review_status: "审批通过",
                       level_four_review_remark: approvalOpinion,
+                      level_four_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                       level_five_reviewer: users.find(
                         (u) => u.value === nextChecker
                       )?.label,
@@ -324,6 +331,7 @@ const PaymentRecordModal = (props) => {
                       id: logId,
                       level_four_review_status: "审批驳回",
                       level_four_review_remark: rejectReason,
+                      level_four_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                     });
                   }
                   // 审批拒绝
@@ -376,6 +384,7 @@ const PaymentRecordModal = (props) => {
                       level_five_reviewer: currentUser?.nickname,
                       level_five_review_status: "审批通过",
                       level_five_review_remark: approvalReason,
+                      level_five_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                       real_approval_money: String(real_amount),
                     });
                   }
@@ -394,6 +403,7 @@ const PaymentRecordModal = (props) => {
                       level_five_reviewer: currentUser?.nickname,
                       level_five_review_status: "审批驳回",
                       level_five_review_remark: rejectReason,
+                      level_five_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                     });
                   }
                   // 审批拒绝

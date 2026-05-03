@@ -54,6 +54,16 @@ const Personnel = () => {
       render: (text) => Roles.find((item) => item.value === text)?.label,
     },
     {
+      title: "开户银行",
+      dataIndex: "bankCardName",
+      search: false,
+    },
+    {
+      title: "银行卡号",
+      dataIndex: "bankCardNo",
+      search: false,
+    },
+    {
       title: "操作",
       dataIndex: "option",
       valueType: "option",

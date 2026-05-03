@@ -6,6 +6,7 @@ import {
   DeploymentUnitOutlined,
   DiffOutlined,
   DropboxOutlined,
+  FlagOutlined,
   HighlightOutlined,
   PropertySafetyOutlined,
   SafetyOutlined,
@@ -39,6 +40,7 @@ const iconMap = {
   PropertySafetyOutlined: <PropertySafetyOutlined />,
   DashboardOutlined: <DashboardOutlined />,
   SmileOutlined: <SmileOutlined />,
+  FlagOutlined: <FlagOutlined />,
 };
 
 /**

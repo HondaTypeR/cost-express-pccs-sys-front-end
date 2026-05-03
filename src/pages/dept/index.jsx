@@ -1,7 +1,7 @@
 import { getDeptList, updateDept } from "@/services/dept";
 import { fetchUser } from "@/services/user";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
-import { message, Modal, Select } from "antd";
+import { Dropdown, message, Modal, Select } from "antd";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const FIELD_LABEL = {
@@ -21,6 +21,7 @@ const DeptPage = () => {
   const actionRef = useRef(null);
   const [dataSource, setDataSource] = useState([]);
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [checkerModal, setCheckerModal] = useState({
     open: false,
     record: null,
@@ -42,6 +43,8 @@ const DeptPage = () => {
         }
       } catch (e) {
         // ignore
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
@@ -124,42 +127,67 @@ const DeptPage = () => {
     {
       title: "经办人",
       dataIndex: "level_one_checker",
+      render: (text) => users.find((u) => u.value == text)?.label || text,
     },
     {
       title: "复核人",
       dataIndex: "level_two_checker",
+      render: (text) => users.find((u) => u.value == text)?.label || text,
     },
     {
-      title: "部门意见",
+      title: "部门审核人",
       dataIndex: "level_three_checker",
+      render: (text) => users.find((u) => u.value == text)?.label || text,
     },
     {
-      title: "财务部",
+      title: "财务部审核人",
       dataIndex: "level_four_checker",
+      render: (text) => users.find((u) => u.value == text)?.label || text,
     },
     {
       title: "审批人",
       dataIndex: "level_five_checker",
+      render: (text) => users.find((u) => u.value == text)?.label || text,
     },
     {
       title: "操作",
       valueType: "option",
-      width: 200,
+      width: 80,
       render: (_, record) => {
-        if (!CHECKER_POWERS.includes(record?.power)) return [];
+        const baseItems = [
+          {
+            key: "level_one_checker",
+            label: "设置经办人",
+          },
+          {
+            key: "level_two_checker",
+            label: "设置复核人",
+          },
+        ];
+        const extraItems = CHECKER_POWERS.includes(record?.power)
+          ? []
+          : [
+              {
+                key: "level_three_checker",
+                label: "设置部门审核人",
+              },
+              {
+                key: "level_four_checker",
+                label: "设置财务部审核人",
+              },
+            ];
+        const items = [...baseItems, ...extraItems];
         return [
-          <a
-            key="set-handler"
-            onClick={() => openChecker(record, "level_one_checker")}
+          <Dropdown
+            key="actions"
+            menu={{
+              items,
+              onClick: ({ key }) => openChecker(record, key),
+            }}
+            trigger={["hover"]}
           >
-            设置经办人
-          </a>,
-          <a
-            key="set-reviewer"
-            onClick={() => openChecker(record, "level_two_checker")}
-          >
-            设置复核人
-          </a>,
+            <a>设置权限</a>
+          </Dropdown>,
         ];
       },
     },
@@ -168,6 +196,7 @@ const DeptPage = () => {
   return (
     <PageContainer>
       <ProTable
+        loading={loading}
         actionRef={actionRef}
         rowKey={(record, index) => record?.id || record?.dept_id || index}
         columns={columns}
@@ -203,7 +232,7 @@ const DeptPage = () => {
           allowClear
           placeholder="请选择人员"
           options={users}
-          value={checkerModal.value}
+          value={checkerModal.value ? Number(checkerModal.value) : undefined}
           onChange={(val) =>
             setCheckerModal((prev) => ({ ...prev, value: val }))
           }

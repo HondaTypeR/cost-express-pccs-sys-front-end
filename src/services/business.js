@@ -518,3 +518,124 @@ export async function addImportedBudget(body, options) {
         ...(options || {}),
     });
 }
+// 新增报销单
+export async function addWorkFeeApply(body, options) {
+    return request('/api/business/apply/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 发起报销单审批
+export async function submitWorkFeeApproval(body, options) {
+    return request('/api/business/apply/submit_approval', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 删除报销单
+export async function deleteWorkFeeApply(body, options) {
+    return request('/api/business/apply/delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 按级别查询报销单（审核页用）
+export async function findWorkFeeApplyListByLevel(body, options) {
+    return request('/api/business/apply/list/by_level', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 发起审批（多级流转）
+export async function submitWorkFeeApplyWithLevels(body, options) {
+    return request('/api/business/apply/submit_with_levels', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 审批通过（多级流转）
+export async function approveWorkFeeApplyWithLevels(body, options) {
+    return request('/api/business/apply/approve_with_levels', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 审批驳回（多级流转）
+export async function rejectWorkFeeApplyWithLevels(body, options) {
+    return request('/api/business/apply/reject_with_levels', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 审批通过报销单
+export async function approveWorkFeeApply(body, options) {
+    return request('/api/business/apply/approve', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 审批驳回报销单
+export async function rejectWorkFeeApply(body, options) {
+    return request('/api/business/apply/reject', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 编辑报销单
+export async function updateWorkFeeApply(body, options) {
+    return request('/api/business/apply/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}
+// 报销单列表
+export async function findWorkFeeApplyList(body, options) {
+    return request('/api/business/apply/list', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        data: body,
+        ...(options || {}),
+    });
+}

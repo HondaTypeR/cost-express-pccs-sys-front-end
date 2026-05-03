@@ -119,6 +119,18 @@ export default [
     path: '/workbench',
     component: './welcome/DataCenter',
   },
+  {
+    name: '办公费用报销单',
+    icon: 'DeploymentUnitOutlined',
+    path: '/workFeeApply',
+    component: './workFeeApply',
+  },
+  {
+    name: '办公报销单审核',
+    icon: 'FlagOutlined',
+    path: '/workFeeApplyApproval',
+    component: './workFeeApplyApproval',
+  },
   
   {
     path: '/',

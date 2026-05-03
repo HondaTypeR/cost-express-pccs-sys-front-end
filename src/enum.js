@@ -74,3 +74,8 @@ export const WaitStatus = [
     { label: "终审审核中", value: 4 },
     { label: "已归档", value: 10 },
 ]
+
+export const ApplyDept = [
+    { label: "销售部", value: '1' },
+    { label: "综合办", value: '2' },
+]

@@ -18,6 +18,7 @@ import { checkPower } from "@/utils";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
 import { useModel } from "@umijs/max";
 import { Button, message, Popconfirm } from "antd";
+import dayjs from "dayjs";
 import { useEffect, useRef, useState } from "react";
 import ApprovalLogModal from "../materialManagement/Components/ApprovalLogModal";
 import ApprovalModal from "./Components/ApprovalModal";
@@ -341,6 +342,7 @@ const MaterialManagement = () => {
                   log_type: "机械",
                   level_one_reviewer: currentUser?.username,
                   level_one_review_status: "发起审批",
+                  level_one_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                   level_two_reviewer: users.find(
                     (user) => user.value === reviewerId
                   )?.label,
@@ -419,6 +421,7 @@ const MaterialManagement = () => {
                       id: logId,
                       level_two_review_status: "审批通过",
                       level_two_review_remark: approvalOpinion,
+                      level_two_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                       level_three_reviewer: users.find(
                         (user) => user.value === user_id
                       )?.label,
@@ -437,6 +440,7 @@ const MaterialManagement = () => {
                       id: logId,
                       level_two_review_status: "审批驳回",
                       level_two_review_remark: approvalOpinion,
+                      level_two_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                     });
                   }
                   // 审批驳回
@@ -480,6 +484,7 @@ const MaterialManagement = () => {
                       level_three_reviewer: currentUser?.nickname,
                       level_three_review_status: "审批通过",
                       level_three_review_remark: approvalOpinion,
+                      level_three_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                     });
                   }
                   // 审核通过
@@ -500,6 +505,7 @@ const MaterialManagement = () => {
                       level_three_reviewer: currentUser?.nickname,
                       level_three_review_status: "审批驳回",
                       level_three_review_remark: approvalOpinion,
+                      level_three_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
                     });
                   }
                   // 审核驳回

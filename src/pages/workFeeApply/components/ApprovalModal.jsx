@@ -29,6 +29,7 @@ const ApprovalModal = (props) => {
     if (!open || !dept || !power || !level) return;
     (async () => {
       const res = await getDeptList();
+      console.log("🚀 ~ ApprovalModal ~ res:", res);
       if (res?.code !== 200) return;
       const field = CHECKER_FIELDS[level - 1];
       const matched = (res.data || []).find(
