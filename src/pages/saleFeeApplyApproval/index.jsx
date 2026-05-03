@@ -211,7 +211,7 @@ const WorkFeeApplyApproval = () => {
               onOk={async (reviewerId) => {
                 await addReviewLog({
                   link_info: record.id,
-                  log_type: "办公审批",
+                  log_type: "销售审批",
                   level_one_reviewer:
                     currentUser?.nickname || currentUser?.username,
                   level_one_review_status: "发起审批",
@@ -256,7 +256,7 @@ const WorkFeeApplyApproval = () => {
                 onOk={async (approvalStatus, approvalOpinion) => {
                   const getCurrentLog = await listReviewLog({
                     link_info: record.id,
-                    log_type: "办公审批",
+                    log_type: "销售审批",
                   });
                   const logId = getCurrentLog.data?.[0]?.id;
                   let res;
@@ -323,7 +323,7 @@ const WorkFeeApplyApproval = () => {
           const res = await findWorkFeeApplyListByLevel({
             ...params,
             user_id: currentUser?.id,
-            dept: "2",
+            dept: "1",
           });
           return {
             data: res.data,

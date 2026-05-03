@@ -148,8 +148,8 @@ const baseColumns = [
   },
 ];
 
-const DEPT = "综合办";
-const POWER = "办公费用报销单";
+const DEPT = "销售部";
+const POWER = "销售费用报销单";
 
 const WorkFeeApply = () => {
   const { initialState } = useModel("@@initialState");
@@ -182,7 +182,7 @@ const WorkFeeApply = () => {
         const actions = [
           <ApprovalLogModal
             key="approval-log"
-            log_type="办公费用"
+            log_type="销售费用"
             materialCode={record.id}
             trigger={<a>审批日志</a>}
           />,
@@ -210,7 +210,7 @@ const WorkFeeApply = () => {
               onOk={async (reviewerId) => {
                 await addReviewLog({
                   link_info: record.id,
-                  log_type: "办公费用",
+                  log_type: "销售费用",
                   level_one_reviewer: currentUser?.username,
                   level_one_review_status: "发起审批",
                   level_one_time: dayjs().format("YYYY-MM-DD HH:mm:ss"),
@@ -270,7 +270,7 @@ const WorkFeeApply = () => {
               onOk={async (approvalStatus, approvalOpinion, user_id) => {
                 const getCurrentLog = await listReviewLog({
                   link_info: record.id,
-                  log_type: "办公费用",
+                  log_type: "销售费用",
                 });
                 let res;
                 if (approvalStatus === 1) {
@@ -323,7 +323,7 @@ const WorkFeeApply = () => {
               onOk={async (approvalStatus, approvalOpinion) => {
                 const getCurrentLog = await listReviewLog({
                   link_info: record.id,
-                  log_type: "办公费用",
+                  log_type: "销售费用",
                 });
                 let res;
                 if (approvalStatus === 1) {
@@ -380,7 +380,7 @@ const WorkFeeApply = () => {
         toolBarRender={() => [
           <AddAndEdit
             key={Math.random()}
-            record={{ dept: ApplyDept[1].value }}
+            record={{ dept: ApplyDept[0].value }}
             onOk={() => actionRef.current?.reload()}
             trigger={
               <Button type="primary" icon={<PlusOutlined />}>
@@ -391,7 +391,7 @@ const WorkFeeApply = () => {
         ]}
         columns={columns}
         request={async (params) => {
-          const res = await findWorkFeeApplyList({ ...params, dept: "2" });
+          const res = await findWorkFeeApplyList({ ...params, dept: "1" });
           return {
             data: res.data,
             success: true,

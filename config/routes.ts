@@ -131,7 +131,18 @@ export default [
     path: '/workFeeApplyApproval',
     component: './workFeeApplyApproval',
   },
-  
+   {
+    name: '销售费用报销单',
+    icon: 'HighlightOutlined',
+    path: '/saleFeeApply',
+    component: './saleFeeApply',
+  },
+  {
+    name: '销售报销单审核',
+    icon: 'DeploymentUnitOutlined',
+    path: '/saleFeeApplyApproval',
+    component: './saleFeeApplyApproval',
+  },
   {
     path: '/',
     redirect: '/welcome',
