@@ -198,10 +198,7 @@ const WorkFeeApplyApproval = () => {
         const levelNum = record?.current_apply_level.replace("level_", "");
         const levelKey = `level_${levelNum}`;
         // 发起审批：草稿且待审核且当前用户是 level_one_checker
-        if (
-          record?.current_apply_level === "one" &&
-          String(record[`${levelKey}_checker`]) === uid
-        ) {
+        if (record?.current_apply_level === "one") {
           actions.push(
             <SubmitApprovalModal
               key="submit"

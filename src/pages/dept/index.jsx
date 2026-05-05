@@ -131,7 +131,13 @@ const DeptPage = () => {
       title: "一级发起人",
       dataIndex: "level_one_checker",
       render: (text, record) => {
-        if (record?.power === "办公费用报销单") return "各员工";
+        if (["办公费用报销单"].includes(record?.power)) return "各员工";
+        if (
+          record?.dept_name === "综合办" &&
+          record?.power === "结算付款审批单"
+        ) {
+          return "各员工";
+        }
         return users.find((u) => u.value == text)?.label || text;
       },
     },
