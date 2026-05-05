@@ -15,6 +15,7 @@ export async function login(body, options) {
 }
 
 export async function loginOut(body, options) {
+    localStorage.removeItem('token');
     return request('/api/auth/logout', {
         method: 'GET',
         ...(options || {}),
