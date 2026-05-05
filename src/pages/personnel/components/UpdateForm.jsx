@@ -65,7 +65,7 @@ const UpdateForm = (props) => {
             status: 0,
             nickname: formValues?.username,
             name: formValues?.username,
-            menu_role: formValues?.role,
+            menu_role: formValues?.menu_role,
           });
           return true;
         }}
@@ -131,7 +131,7 @@ const UpdateForm = (props) => {
         </ProFormDependency>
         <ProFormSelect
           label="角色"
-          name="role"
+          name="menu_role"
           options={Roles}
           rules={[
             {

@@ -67,7 +67,7 @@ const CreateForm = (props) => {
             nickname: value?.username,
             name: value?.username,
             password: "123456",
-            menu_role: value?.role,
+            menu_role: value?.menu_role,
           });
           return true;
         }}
@@ -133,7 +133,7 @@ const CreateForm = (props) => {
         </ProFormDependency>
         <ProFormSelect
           label="角色"
-          name="role"
+          name="menu_role"
           options={Roles}
           rules={[
             {

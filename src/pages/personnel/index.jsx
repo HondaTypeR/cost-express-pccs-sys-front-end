@@ -58,8 +58,11 @@ const Personnel = () => {
     },
     {
       title: "角色",
-      dataIndex: "role",
-      render: (text) => Roles.find((item) => item.value === text)?.label,
+      dataIndex: "menu_role",
+      render: (text) => {
+        const role = Roles.find((item) => item.value === text);
+        return role ? role.label : text;
+      },
     },
     {
       title: "开户银行",
