@@ -127,7 +127,10 @@ const DeptPage = () => {
     {
       title: "经办人",
       dataIndex: "level_one_checker",
-      render: (text) => users.find((u) => u.value == text)?.label || text,
+      render: (text, record) => {
+        if (record?.power === "办公费用报销单") return "各员工";
+        return users.find((u) => u.value == text)?.label || text;
+      },
     },
     {
       title: "复核人",
@@ -154,28 +157,37 @@ const DeptPage = () => {
       valueType: "option",
       width: 80,
       render: (_, record) => {
-        const baseItems = [
-          {
-            key: "level_one_checker",
-            label: "设置经办人",
-          },
-          {
-            key: "level_two_checker",
-            label: "设置复核人",
-          },
-        ];
-        const extraItems = CHECKER_POWERS.includes(record?.power)
-          ? []
+        const isOfficeFee = record?.power === "办公费用报销单";
+        const baseItems = isOfficeFee
+          ? [
+              {
+                key: "level_two_checker",
+                label: "设置复核人",
+              },
+            ]
           : [
               {
-                key: "level_three_checker",
-                label: "设置部门审核人",
+                key: "level_one_checker",
+                label: "设置经办人",
               },
               {
-                key: "level_four_checker",
-                label: "设置财务部审核人",
+                key: "level_two_checker",
+                label: "设置复核人",
               },
             ];
+        const extraItems =
+          isOfficeFee || CHECKER_POWERS.includes(record?.power)
+            ? []
+            : [
+                {
+                  key: "level_three_checker",
+                  label: "设置部门审核人",
+                },
+                {
+                  key: "level_four_checker",
+                  label: "设置财务部审核人",
+                },
+              ];
         const items = [...baseItems, ...extraItems];
         return [
           <Dropdown

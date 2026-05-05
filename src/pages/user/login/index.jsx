@@ -31,9 +31,10 @@ const useStyles = createStyles(({ token }) => {
       flexDirection: "column",
       height: "100vh",
       overflow: "auto",
-      backgroundImage:
-        "url('https://mdn.alipayobjects.com/yuyan_qk0oxh/afts/img/V-_oS6r-i7wAAAAAAAAAAAAAFl94AQBr')",
-      backgroundSize: "100% 100%",
+      backgroundImage: "url('/background.png')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
     },
   };
 });
@@ -107,81 +108,94 @@ const Login = () => {
         style={{
           flex: "1",
           padding: "32px 0",
+          position: "relative",
         }}
       >
-        <LoginForm
-          contentStyle={{
-            minWidth: 280,
-            maxWidth: "75vw",
-          }}
-          logo={<img alt="logo" src="/logo.svg" />}
-          title="Ant Design"
-          subTitle="sys"
-          initialValues={{
-            autoLogin: true,
-          }}
-          onFinish={async (values) => {
-            await handleSubmit(values);
+        <div
+          style={{
+            position: "absolute",
+            right: "10vw",
+            top: "50%",
+            transform: "translateY(-50%)",
           }}
         >
-          <Tabs
-            activeKey={type}
-            onChange={setType}
-            centered
-            items={[
-              {
-                key: "account",
-                label: "账户密码登录",
-              },
-            ]}
-          />
-
-          {status === "error" && loginType === "account" && (
-            <LoginMessage content="账户或密码错误(admin/ant.design)" />
-          )}
-          {type === "account" && (
-            <>
-              <ProFormText
-                name="username"
-                fieldProps={{
-                  size: "large",
-                  prefix: <UserOutlined />,
-                }}
-                placeholder="请输入用户名"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入用户名!",
-                  },
-                ]}
-              />
-              <ProFormText.Password
-                name="password"
-                fieldProps={{
-                  size: "large",
-                  prefix: <LockOutlined />,
-                }}
-                placeholder="请输入密码"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入密码!",
-                  },
-                ]}
-              />
-            </>
-          )}
-
-          <div
-            style={{
-              marginBottom: 24,
+          <LoginForm
+            contentStyle={{
+              minWidth: 280,
+              maxWidth: "75vw",
+              width: 360,
+            }}
+            logo={<img alt="logo" src="/logo.svg" />}
+            title={<div style={{ color: "#4096ff" }}>成本控制系统</div>}
+            subTitle={
+              <div style={{ color: "#45454f" }}>贵州久益建筑有限公司</div>
+            }
+            initialValues={{
+              autoLogin: true,
+            }}
+            onFinish={async (values) => {
+              await handleSubmit(values);
             }}
           >
-            <ProFormCheckbox noStyle name="autoLogin">
-              自动登录
-            </ProFormCheckbox>
-          </div>
-        </LoginForm>
+            <Tabs
+              activeKey={type}
+              onChange={setType}
+              centered
+              items={[
+                {
+                  key: "account",
+                  label: "账户密码登录",
+                },
+              ]}
+            />
+
+            {status === "error" && loginType === "account" && (
+              <LoginMessage content="账户或密码错误(admin/ant.design)" />
+            )}
+            {type === "account" && (
+              <>
+                <ProFormText
+                  name="username"
+                  fieldProps={{
+                    size: "large",
+                    prefix: <UserOutlined />,
+                  }}
+                  placeholder="请输入用户名"
+                  rules={[
+                    {
+                      required: true,
+                      message: "请输入用户名!",
+                    },
+                  ]}
+                />
+                <ProFormText.Password
+                  name="password"
+                  fieldProps={{
+                    size: "large",
+                    prefix: <LockOutlined />,
+                  }}
+                  placeholder="请输入密码"
+                  rules={[
+                    {
+                      required: true,
+                      message: "请输入密码!",
+                    },
+                  ]}
+                />
+              </>
+            )}
+
+            <div
+              style={{
+                marginBottom: 24,
+              }}
+            >
+              <ProFormCheckbox noStyle name="autoLogin">
+                自动登录
+              </ProFormCheckbox>
+            </div>
+          </LoginForm>
+        </div>
       </div>
       <Footer />
     </div>

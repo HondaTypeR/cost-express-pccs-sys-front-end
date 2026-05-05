@@ -25,7 +25,8 @@ const CreateForm = (props) => {
   const { run, loading } = useRequest(addUser, {
     manual: true,
     onSuccess: (res) => {
-      messageApi.success("添加成功");
+      const username = formRef.current?.getFieldValue("username");
+      messageApi.success(`添加成功！员工账号：${username}；密码：123456`, 5);
       setOpen(false);
       reload?.();
     },
@@ -59,6 +60,9 @@ const CreateForm = (props) => {
         onFinish={async (value) => {
           await run({
             ...value,
+            owner_dept: Array.isArray(value?.owner_dept)
+              ? value.owner_dept.join(",")
+              : value?.owner_dept,
             status: 0,
             nickname: value?.username,
             name: value?.username,
@@ -112,6 +116,8 @@ const CreateForm = (props) => {
                 name="owner_dept"
                 options={departmentOptions}
                 disabled={!owner_company}
+                mode="multiple"
+                fieldProps={{ mode: "multiple" }}
                 rules={[
                   {
                     required: true,

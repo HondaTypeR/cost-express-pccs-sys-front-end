@@ -71,7 +71,7 @@ const ReviewApprovalModal = (props) => {
           name="user_id"
           label="审核人"
           placeholder="请选择审核人"
-          initialValue={999}
+          initialValue={2}
           options={users}
           rules={[
             {

@@ -1,4 +1,5 @@
 import { AvatarDropdown, AvatarName, Footer } from "@/components";
+import ChangePasswordModal from "@/components/ChangePasswordModal";
 import { getUserMenus } from "@/services/menu.js";
 import { currentUser as queryCurrentUser } from "@/services/userInfo.js";
 import {
@@ -196,22 +197,12 @@ export const layout = ({ initialState, setInitialState }) => {
     // 增加一个 loading 的状态
     childrenRender: (children) => {
       // if (initialState?.loading) return <PageLoading />;
+      const needForceChangePassword =
+        initialState?.currentUser?.isInitPass === 1;
       return (
         <>
           {children}
-          {/* {isDev && (
-            <SettingDrawer
-              disableUrlParams
-              enableDarkTheme
-              settings={initialState?.settings}
-              onSettingChange={(settings) => {
-                setInitialState((preInitialState) => ({
-                  ...preInitialState,
-                  settings,
-                }));
-              }}
-            />
-          )} */}
+          {needForceChangePassword && <ChangePasswordModal open forced />}
         </>
       );
     },

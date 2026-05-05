@@ -6,7 +6,7 @@ import { message } from "antd";
 import { history } from "umi";
 
 const ChangePasswordModal = (props) => {
-  const { open, onCancel } = props;
+  const { open, onCancel, forced } = props;
   const { initialState } = useModel("@@initialState");
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -18,8 +18,14 @@ const ChangePasswordModal = (props) => {
         open={open}
         width="500px"
         modalProps={{
-          onCancel: onCancel,
+          onCancel: forced ? undefined : onCancel,
           destroyOnClose: true,
+          closable: !forced,
+          maskClosable: !forced,
+          keyboard: !forced,
+        }}
+        submitter={{
+          resetButtonProps: forced ? false : undefined,
         }}
         onFinish={async (values) => {
           if (values.newPassword !== values.confirmPassword) {

@@ -46,7 +46,15 @@ const Personnel = () => {
     {
       title: "所属部门",
       dataIndex: "owner_dept",
-      render: (text) => Departments.find((item) => item.value == text)?.label,
+      render: (text) => {
+        if (text == null || text === "") return "-";
+        const ids = String(text).split(",").filter(Boolean);
+        return ids
+          .map(
+            (id) => Departments.find((item) => item.value == id)?.label || id
+          )
+          .join("、");
+      },
     },
     {
       title: "角色",

@@ -48,10 +48,19 @@ const UpdateForm = (props) => {
           onCancel: () => setOpen(false),
           destroyOnClose: true,
         }}
-        initialValues={values}
+        initialValues={{
+          ...values,
+          owner_dept:
+            typeof values?.owner_dept === "string"
+              ? values.owner_dept.split(",").filter(Boolean)
+              : values?.owner_dept,
+        }}
         onFinish={async (formValues) => {
           await run({
             ...formValues,
+            owner_dept: Array.isArray(formValues?.owner_dept)
+              ? formValues.owner_dept.join(",")
+              : formValues?.owner_dept,
             id: values.id,
             status: 0,
             nickname: formValues?.username,
@@ -104,6 +113,8 @@ const UpdateForm = (props) => {
                 name="owner_dept"
                 options={departmentOptions}
                 disabled={!owner_company}
+                mode="multiple"
+                fieldProps={{ mode: "multiple" }}
                 rules={[
                   {
                     required: true,

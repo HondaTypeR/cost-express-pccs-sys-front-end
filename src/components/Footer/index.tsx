@@ -6,8 +6,9 @@ const Footer: React.FC = () => {
     <DefaultFooter
       style={{
         background: "none",
+        userSelect: "none",
       }}
-      copyright="Powered by Ant Desgin"
+      copyright="2026 贵州久益建筑"
       links={
         [
           // {

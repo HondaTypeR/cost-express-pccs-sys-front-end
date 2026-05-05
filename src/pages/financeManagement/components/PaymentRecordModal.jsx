@@ -290,7 +290,7 @@ const PaymentRecordModal = (props) => {
               key="rechecker-approval"
               trigger={<a>审批</a>}
               users={users}
-              fixedChecker={999}
+              fixedChecker={2}
               currentAmount={record.total_amount}
               nextApproverLabel="终审审批人"
               onOk={async (

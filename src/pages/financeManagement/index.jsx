@@ -309,7 +309,7 @@ const FinanceManagement = () => {
             const userId = currentUser?.id;
             const ownerDept = currentUser?.owner_dept;
             const filterList = (res.data.list || []).filter((item) => {
-              if (userId == 1 || userId == 999) return true;
+              if (userId == 1 || userId == 2) return true;
               if (ownerDept == 1) return item.data_type === "material";
               if (ownerDept == 2)
                 return (
