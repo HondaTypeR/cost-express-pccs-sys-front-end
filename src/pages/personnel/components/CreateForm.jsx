@@ -67,7 +67,7 @@ const CreateForm = (props) => {
             nickname: value?.username,
             name: value?.username,
             password: "123456",
-            menu_role: "admin",
+            menu_role: value?.role,
           });
           return true;
         }}

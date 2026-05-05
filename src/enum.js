@@ -21,9 +21,7 @@ export const Departments = [
 
 export const Roles = [
     { label: "普通员工", value: 'user' },
-    { label: "经办人", value: 'handler' },
-    { label: "复核人", value: 'reviewer' },
-    { label: "审核人", value: 'auditor' },
+    { label: "系统管理员", value: 'admin' },
 ]
 
 export const UserStatus = [

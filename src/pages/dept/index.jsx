@@ -5,8 +5,11 @@ import { Dropdown, message, Modal, Select } from "antd";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const FIELD_LABEL = {
-  level_one_checker: "经办人",
-  level_two_checker: "复核人",
+  level_one_checker: "一级发起人",
+  level_two_checker: "二级审批人",
+  level_three_checker: "三级审批人",
+  level_four_checker: "四级审批人",
+  level_five_checker: "五级审批人",
 };
 
 const CHECKER_POWERS = [
@@ -125,7 +128,7 @@ const DeptPage = () => {
       dataIndex: "power",
     },
     {
-      title: "经办人",
+      title: "一级发起人",
       dataIndex: "level_one_checker",
       render: (text, record) => {
         if (record?.power === "办公费用报销单") return "各员工";
@@ -133,22 +136,22 @@ const DeptPage = () => {
       },
     },
     {
-      title: "复核人",
+      title: "二级审批人",
       dataIndex: "level_two_checker",
       render: (text) => users.find((u) => u.value == text)?.label || text,
     },
     {
-      title: "部门审核人",
+      title: "三级审批人",
       dataIndex: "level_three_checker",
       render: (text) => users.find((u) => u.value == text)?.label || text,
     },
     {
-      title: "财务部审核人",
+      title: "四级审批人",
       dataIndex: "level_four_checker",
       render: (text) => users.find((u) => u.value == text)?.label || text,
     },
     {
-      title: "审批人",
+      title: "五级审批人",
       dataIndex: "level_five_checker",
       render: (text) => users.find((u) => u.value == text)?.label || text,
     },
@@ -162,32 +165,49 @@ const DeptPage = () => {
           ? [
               {
                 key: "level_two_checker",
-                label: "设置复核人",
+                label: "设置二级审批人",
+              },
+              {
+                key: "level_three_checker",
+                label: "设置三级审批人",
               },
             ]
           : [
               {
                 key: "level_one_checker",
-                label: "设置经办人",
+                label: "设置一级发起人",
               },
               {
                 key: "level_two_checker",
-                label: "设置复核人",
+                label: "设置二级审批人",
               },
             ];
-        const extraItems =
-          isOfficeFee || CHECKER_POWERS.includes(record?.power)
-            ? []
-            : [
-                {
-                  key: "level_three_checker",
-                  label: "设置部门审核人",
-                },
-                {
-                  key: "level_four_checker",
-                  label: "设置财务部审核人",
-                },
-              ];
+        let extraItems = [];
+        if (isOfficeFee) {
+          extraItems = [];
+        } else if (CHECKER_POWERS.includes(record?.power)) {
+          extraItems = [
+            {
+              key: "level_three_checker",
+              label: "设置三级审批人",
+            },
+          ];
+        } else {
+          extraItems = [
+            {
+              key: "level_three_checker",
+              label: "设置三级审批人",
+            },
+            {
+              key: "level_four_checker",
+              label: "设置四级审批人",
+            },
+            {
+              key: "level_five_checker",
+              label: "设置五级审批人",
+            },
+          ];
+        }
         const items = [...baseItems, ...extraItems];
         return [
           <Dropdown

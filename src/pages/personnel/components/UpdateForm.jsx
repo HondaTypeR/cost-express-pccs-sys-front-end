@@ -65,6 +65,7 @@ const UpdateForm = (props) => {
             status: 0,
             nickname: formValues?.username,
             name: formValues?.username,
+            menu_role: formValues?.role,
           });
           return true;
         }}
