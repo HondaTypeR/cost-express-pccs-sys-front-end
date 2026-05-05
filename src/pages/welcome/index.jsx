@@ -172,7 +172,8 @@ const Welcome = () => {
         hoverable={hasPending}
         style={{
           width: "100%",
-          height: 120,
+          height: "auto",
+          maxHeight: 260,
           textAlign: "left",
           background: hasPending
             ? theme.bg || "linear-gradient(135deg, #faad14 0%, #ffd666 100%)"
@@ -183,7 +184,7 @@ const Welcome = () => {
           opacity: hasPending ? 1 : 0.8,
           transition: "all .2s ease",
         }}
-        bodyStyle={{ padding: 16, height: "100%" }}
+        bodyStyle={{ padding: 16, height: "auto" }}
         onClick={hasPending && onClick ? onClick : undefined}
       >
         <div
