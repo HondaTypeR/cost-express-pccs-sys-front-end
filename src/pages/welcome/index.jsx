@@ -126,21 +126,15 @@ const Welcome = () => {
   // 材料/机械/人工 待我审批（根据 reviewer / auditor + 待审核）
   const pendingMaterials = (materials || []).filter(
     (r) =>
-      r?.audit_status === 0 &&
-      ((r?.document_status === 1 && currentUser?.id == r?.reviewer) ||
-        (r?.document_status === 2 && currentUser?.id == r?.auditor))
+      ((r?.document_status === 1 && currentUser?.id == r?.reviewer) || (r?.document_status === 2 && currentUser?.id == r?.auditor))
   );
   const pendingMechanicals = (mechanicals || []).filter(
-    (r) =>
-      r?.audit_status === 0 &&
-      ((r?.document_status === 1 && currentUser?.id == r?.reviewer) ||
-        (r?.document_status === 2 && currentUser?.id == r?.auditor))
+    (r) => ((r?.document_status === 1 && currentUser?.id == r?.reviewer) ||
+      (r?.document_status === 2 && currentUser?.id == r?.auditor))
   );
   const pendingArtificials = (artificials || []).filter(
-    (r) =>
-      r?.audit_status === 0 &&
-      ((r?.document_status === 1 && currentUser?.id == r?.reviewer) ||
-        (r?.document_status === 2 && currentUser?.id == r?.auditor))
+    (r) => ((r?.document_status === 1 && currentUser?.id == r?.reviewer) ||
+      (r?.document_status === 2 && currentUser?.id == r?.auditor))
   );
   const themes = {
     finance: {

@@ -536,19 +536,19 @@ const MaterialManagement = () => {
         toolBarRender={() =>
           canCreate
             ? [
-                <CreateForm
-                  key="create"
-                  onOk={() => actionRef.current?.reload()}
-                  trigger={
-                    <Button type="primary" key="primary">
-                      新建材料
-                    </Button>
-                  }
-                  projects={projects}
-                  suppliers={suppliers}
-                  contracts={contracts}
-                />,
-              ]
+              <CreateForm
+                key="create"
+                onOk={() => actionRef.current?.reload()}
+                trigger={
+                  <Button type="primary" key="primary">
+                    新建材料
+                  </Button>
+                }
+                projects={projects}
+                suppliers={suppliers}
+                contracts={contracts}
+              />,
+            ]
             : []
         }
         request={async (params, sort, filter) => {

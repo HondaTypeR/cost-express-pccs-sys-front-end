@@ -116,6 +116,7 @@ const Power = () => {
             setSelectedRows(selectedRows);
           },
         }}
+        scroll={{ x: "max-content" }}
       />
       {selectedRowsState?.length > 0 && (
         <FooterToolbar

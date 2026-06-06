@@ -204,6 +204,7 @@ const RelatedContentModal = (props) => {
           loading={loading}
           options={false}
           toolBarRender={false}
+          scroll={{ x: "max-content" }}
         />
       ),
     },
@@ -223,6 +224,7 @@ const RelatedContentModal = (props) => {
           loading={loading}
           options={false}
           toolBarRender={false}
+          scroll={{ x: "max-content" }}
         />
       ),
     },
@@ -242,6 +244,7 @@ const RelatedContentModal = (props) => {
           loading={loading}
           options={false}
           toolBarRender={false}
+          scroll={{ x: "max-content" }}
         />
       ),
     },
@@ -272,11 +275,11 @@ const RelatedContentModal = (props) => {
       trigger={
         trigger
           ? cloneElement(trigger, {
-              onClick: () => {
-                setOpen(true);
-                fetchRelatedData();
-              },
-            })
+            onClick: () => {
+              setOpen(true);
+              fetchRelatedData();
+            },
+          })
           : null
       }
       width={1000}

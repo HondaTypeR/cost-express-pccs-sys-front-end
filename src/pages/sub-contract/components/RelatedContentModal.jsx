@@ -193,6 +193,7 @@ const RelatedContentModal = (props) => {
       label: `材料 (${relatedData.materials.length})`,
       children: (
         <ProTable
+          scroll={{ x: "max-content" }}
           columns={materialColumns}
           dataSource={relatedData.materials}
           rowKey="material_code"
@@ -212,6 +213,7 @@ const RelatedContentModal = (props) => {
       label: `机械 (${relatedData.mechanicals.length})`,
       children: (
         <ProTable
+          scroll={{ x: "max-content" }}
           columns={mechanicalColumns}
           dataSource={relatedData.mechanicals}
           rowKey="mechanical_code"
@@ -231,6 +233,7 @@ const RelatedContentModal = (props) => {
       label: `人工 (${relatedData.artificials.length})`,
       children: (
         <ProTable
+          scroll={{ x: "max-content" }}
           columns={artificialColumns}
           dataSource={relatedData.artificials}
           rowKey="artficial_code"
@@ -272,11 +275,11 @@ const RelatedContentModal = (props) => {
       trigger={
         trigger
           ? cloneElement(trigger, {
-              onClick: () => {
-                setOpen(true);
-                fetchRelatedData();
-              },
-            })
+            onClick: () => {
+              setOpen(true);
+              fetchRelatedData();
+            },
+          })
           : null
       }
       width={1000}

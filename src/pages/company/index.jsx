@@ -100,6 +100,7 @@ const Company = () => {
     <PageContainer title={false}>
       {contextHolder}
       <ProTable
+        scroll={{ x: "max-content" }}
         actionRef={actionRef}
         rowKey="key"
         search={false}

@@ -374,6 +374,7 @@ const WorkFeeApply = () => {
   return (
     <PageContainer>
       <ProTable
+        scroll={{ x: "max-content" }}
         actionRef={actionRef}
         rowKey="id"
         search={false}

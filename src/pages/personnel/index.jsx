@@ -113,6 +113,7 @@ const Personnel = () => {
           };
         }}
         columns={columns}
+        scroll={{ x: "max-content" }}
       />
       <Drawer
         width={600}

@@ -377,6 +377,7 @@ const WorkFeeApply = () => {
         actionRef={actionRef}
         rowKey="id"
         search={false}
+        scroll={{ x: "max-content" }}
         toolBarRender={() => [
           <AddAndEdit
             key={Math.random()}

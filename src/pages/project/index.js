@@ -99,6 +99,7 @@ const Project = () => {
                 ]}
                 request={listProject}
                 columns={columns}
+                scroll={{ x: "max-content" }}
             />
             <Drawer
                 width={600}

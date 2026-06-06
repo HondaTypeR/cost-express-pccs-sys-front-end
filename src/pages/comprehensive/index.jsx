@@ -467,7 +467,7 @@ const Comprehensive = () => {
               name.endsWith(".xlsx") ||
               type === "application/vnd.ms-excel" ||
               type ===
-                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             if (!isExcel) {
               message.error("仅支持上传 .xls 或 .xlsx 文件");
               return Upload.LIST_IGNORE;
@@ -485,7 +485,7 @@ const Comprehensive = () => {
         >
           <Button>选择文件</Button>
         </Upload>
-        <a href="http://101.37.231.212:3000/uploads/temp/%E9%A2%84%E7%AE%97%E6%A8%A1%E7%89%88.xlsx">
+        <a href="http://124.223.88.69/uploads/template/%E9%A2%84%E7%AE%97%E6%A8%A1%E7%89%88.xlsx">
           下载上传模板
         </a>
         <div style={{ marginTop: 8, color: "rgba(0,0,0,.45)" }}>

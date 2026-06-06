@@ -376,7 +376,7 @@ const MaterialManagement = () => {
                     link_info: record.mechanical_code,
                     log_type: "机械",
                   });
-                } catch (e) {}
+                } catch (e) { }
                 const res = await deleteMechanical({
                   mechanical_code: record.mechanical_code,
                 });

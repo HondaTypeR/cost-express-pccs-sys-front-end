@@ -406,6 +406,7 @@ const ViewForm = (props) => {
           项目预算信息
         </Divider>
         <ProTable
+          scroll={{ x: "max-content" }}
           style={{ width: "100%" }}
           rowKey="id"
           columns={columns}

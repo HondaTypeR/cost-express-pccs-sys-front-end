@@ -381,7 +381,7 @@ const MaterialManagement = () => {
                     link_info: record.artficial_code,
                     log_type: "人工",
                   });
-                } catch (e) {}
+                } catch (e) { }
                 const res = await deleteArtificial({
                   artficial_code: record.artficial_code,
                 });

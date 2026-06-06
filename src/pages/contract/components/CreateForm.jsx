@@ -38,8 +38,8 @@ const CreateForm = (props) => {
         trigger={
           trigger
             ? cloneElement(trigger, {
-                onClick: () => setOpen(true),
-              })
+              onClick: () => setOpen(true),
+            })
             : null
         }
         width="600px"
@@ -47,13 +47,27 @@ const CreateForm = (props) => {
           onClose: () => setOpen(false),
           destroyOnClose: true,
         }}
+        initialValues={{
+          contract_type: "1",
+          party_a: "贵州久益建筑有限公司",
+        }}
         onValuesChange={(changedValues) => {
           if (changedValues.contract_type !== undefined) {
-            formRef.current?.setFieldsValue({
-              party_a: undefined,
-              party_b: undefined,
-              party_b_id: undefined,
-            });
+            if (changedValues.contract_type === "1") {
+              // 非采购合同：甲方默认为"贵州久益建筑有限公司"
+              formRef.current?.setFieldsValue({
+                party_a: "贵州久益建筑有限公司",
+                party_b: undefined,
+                party_b_id: undefined,
+              });
+            } else if (changedValues.contract_type === "2") {
+              // 采购合同：乙方默认为"贵州久益建筑有限公司"
+              formRef.current?.setFieldsValue({
+                party_a: undefined,
+                party_b: "贵州久益建筑有限公司",
+                party_b_id: undefined,
+              });
+            }
           }
         }}
         onFinish={async (value) => {
@@ -175,6 +189,7 @@ const CreateForm = (props) => {
                 name="party_a"
                 label="甲方"
                 placeholder="请输入甲方名称"
+                initialValue="贵州久益建筑有限公司"
                 rules={[
                   {
                     required: true,
@@ -193,6 +208,7 @@ const CreateForm = (props) => {
                   name="party_b"
                   label="乙方"
                   placeholder="请输入乙方名称"
+                  initialValue="贵州久益建筑有限公司"
                   rules={[
                     {
                       required: true,

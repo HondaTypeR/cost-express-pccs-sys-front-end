@@ -169,25 +169,25 @@ const DeptPage = () => {
         const isOfficeFee = record?.power === "办公费用报销单";
         const baseItems = isOfficeFee
           ? [
-              {
-                key: "level_two_checker",
-                label: "设置二级审批人",
-              },
-              {
-                key: "level_three_checker",
-                label: "设置三级审批人",
-              },
-            ]
+            {
+              key: "level_two_checker",
+              label: "设置二级审批人",
+            },
+            {
+              key: "level_three_checker",
+              label: "设置三级审批人",
+            },
+          ]
           : [
-              {
-                key: "level_one_checker",
-                label: "设置一级发起人",
-              },
-              {
-                key: "level_two_checker",
-                label: "设置二级审批人",
-              },
-            ];
+            {
+              key: "level_one_checker",
+              label: "设置一级发起人",
+            },
+            {
+              key: "level_two_checker",
+              label: "设置二级审批人",
+            },
+          ];
         let extraItems = [];
         if (isOfficeFee) {
           extraItems = [];
@@ -255,6 +255,7 @@ const DeptPage = () => {
             success: true,
           };
         }}
+        scroll={{ x: "max-content" }}
       />
       <Modal
         title={`设置${FIELD_LABEL[checkerModal.field] || ""}`}

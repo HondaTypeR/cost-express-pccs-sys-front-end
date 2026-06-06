@@ -225,6 +225,7 @@ const Contract = () => {
   return (
     <PageContainer>
       <ProTable
+        scroll={{ x: "max-content" }}
         headerTitle="补充合同列表"
         actionRef={actionRef}
         rowKey="sub_contract_id"
