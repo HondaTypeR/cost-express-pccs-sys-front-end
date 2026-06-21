@@ -103,6 +103,7 @@ const UpdateForm = (props) => {
           const params = {
             ...value,
             contract_id: values.contract_id,
+            party_a: "贵州久益建筑有限公司",
             party_b: selectedSupplier?.label || "",
             project_name: value.project_name || values.project_name,
             contract_type: values.contract_type,
@@ -126,8 +127,10 @@ const UpdateForm = (props) => {
           label="合同类型"
           disabled
           options={[
-            { label: "非采购合同", value: "1" },
+            { label: "工程合同", value: "1" },
             { label: "采购合同", value: "2" },
+            { label: "劳务合同", value: "3" },
+            { label: "其他合同", value: "4" },
           ]}
         />
         <ProFormText
@@ -140,76 +143,20 @@ const UpdateForm = (props) => {
           }}
         />
         <ProFormText name="project_name" label="合同名称" />
-        <ProFormDependency name={["contract_type"]}>
-          {({ contract_type }) => {
-            if (contract_type === "2") {
-              return (
-                <ProFormSelect
-                  name="party_a"
-                  label="甲方"
-                  disabled
-                  placeholder="请选择甲方（供应商）"
-                  options={suppliers}
-                  rules={[
-                    {
-                      required: true,
-                      message: "请选择甲方",
-                    },
-                  ]}
-                />
-              );
-            }
-            return (
-              <ProFormText
-                name="party_a"
-                label="甲方"
-                disabled
-                placeholder="请输入甲方名称"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入甲方名称",
-                  },
-                ]}
-              />
-            );
-          }}
-        </ProFormDependency>
-        <ProFormDependency name={["contract_type"]}>
-          {({ contract_type }) => {
-            if (contract_type === "2") {
-              return (
-                <ProFormText
-                  name="party_b"
-                  label="乙方"
-                  disabled
-                  placeholder="请输入乙方名称"
-                  rules={[
-                    {
-                      required: true,
-                      message: "请输入乙方名称",
-                    },
-                  ]}
-                />
-              );
-            }
-            return (
-              <ProFormSelect
-                name="party_b_id"
-                label="乙方"
-                disabled
-                placeholder="请选择乙方（供应商）"
-                options={suppliers}
-                rules={[
-                  {
-                    required: true,
-                    message: "请选择乙方",
-                  },
-                ]}
-              />
-            );
-          }}
-        </ProFormDependency>
+        <ProFormText name="party_a" label="甲方" disabled />
+        <ProFormSelect
+          name="party_b_id"
+          label="乙方"
+          disabled
+          placeholder="请选择乙方（供应商）"
+          options={suppliers}
+          rules={[
+            {
+              required: true,
+              message: "请选择乙方",
+            },
+          ]}
+        />
         <ProFormDigit
           name="contract_amount"
           label="合同金额"

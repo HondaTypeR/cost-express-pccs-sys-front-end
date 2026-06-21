@@ -51,25 +51,6 @@ const CreateForm = (props) => {
           contract_type: "1",
           party_a: "贵州久益建筑有限公司",
         }}
-        onValuesChange={(changedValues) => {
-          if (changedValues.contract_type !== undefined) {
-            if (changedValues.contract_type === "1") {
-              // 非采购合同：甲方默认为"贵州久益建筑有限公司"
-              formRef.current?.setFieldsValue({
-                party_a: "贵州久益建筑有限公司",
-                party_b: undefined,
-                party_b_id: undefined,
-              });
-            } else if (changedValues.contract_type === "2") {
-              // 采购合同：乙方默认为"贵州久益建筑有限公司"
-              formRef.current?.setFieldsValue({
-                party_a: undefined,
-                party_b: "贵州久益建筑有限公司",
-                party_b_id: undefined,
-              });
-            }
-          }
-        }}
         onFinish={async (value) => {
           return new Promise((resolve) => {
             Modal.confirm({
@@ -93,21 +74,11 @@ const CreateForm = (props) => {
                   contract_attachment: attachmentPayload,
                 };
 
-                // 如果是采购合同（contract_type = "2"），甲方是下拉选择
-                if (value.contract_type === "2") {
-                  // party_a 是供应商ID，需要找到对应的供应商名称
-                  const selectedSupplierA = suppliers.find(
-                    (s) => s.value === value.party_a
-                  );
-                  params.party_b_id = value.party_a; // 将甲方的供应商ID赋值给party_b_id
-                  params.party_a = selectedSupplierA?.label || value.party_a;
-                } else {
-                  // 如果是非采购合同（contract_type = "1"），乙方是下拉选择
-                  const selectedSupplierB = suppliers.find(
-                    (s) => s.value === value.party_b_id
-                  );
-                  params.party_b = selectedSupplierB?.label || "";
-                }
+                const selectedSupplierB = suppliers.find(
+                  (s) => s.value === value.party_b_id
+                );
+                params.party_a = "贵州久益建筑有限公司";
+                params.party_b = selectedSupplierB?.label || "";
 
                 const res = await addContract(params);
 
@@ -133,8 +104,10 @@ const CreateForm = (props) => {
           label="合同类型"
           initialValue="1"
           options={[
-            { label: "非采购合同", value: "1" },
+            { label: "工程合同", value: "1" },
             { label: "采购合同", value: "2" },
+            { label: "劳务合同", value: "3" },
+            { label: "其他合同", value: "4" },
           ]}
           rules={[
             {
@@ -166,74 +139,29 @@ const CreateForm = (props) => {
             },
           ]}
         />
-        <ProFormDependency name={["contract_type"]}>
-          {({ contract_type }) => {
-            if (contract_type === "2") {
-              return (
-                <ProFormSelect
-                  name="party_a"
-                  label="甲方"
-                  placeholder="请选择甲方（供应商）"
-                  options={suppliers}
-                  rules={[
-                    {
-                      required: true,
-                      message: "请选择甲方",
-                    },
-                  ]}
-                />
-              );
-            }
-            return (
-              <ProFormText
-                name="party_a"
-                label="甲方"
-                placeholder="请输入甲方名称"
-                initialValue="贵州久益建筑有限公司"
-                rules={[
-                  {
-                    required: true,
-                    message: "请输入甲方名称",
-                  },
-                ]}
-              />
-            );
-          }}
-        </ProFormDependency>
-        <ProFormDependency name={["contract_type"]}>
-          {({ contract_type }) => {
-            if (contract_type === "2") {
-              return (
-                <ProFormText
-                  name="party_b"
-                  label="乙方"
-                  placeholder="请输入乙方名称"
-                  initialValue="贵州久益建筑有限公司"
-                  rules={[
-                    {
-                      required: true,
-                      message: "请输入乙方名称",
-                    },
-                  ]}
-                />
-              );
-            }
-            return (
-              <ProFormSelect
-                name="party_b_id"
-                label="乙方"
-                placeholder="请选择乙方（供应商）"
-                options={suppliers}
-                rules={[
-                  {
-                    required: true,
-                    message: "请选择乙方",
-                  },
-                ]}
-              />
-            );
-          }}
-        </ProFormDependency>
+        <ProFormText
+          name="party_a"
+          label="甲方"
+          disabled
+          rules={[
+            {
+              required: true,
+              message: "请输入甲方名称",
+            },
+          ]}
+        />
+        <ProFormSelect
+          name="party_b_id"
+          label="乙方"
+          placeholder="请选择乙方（供应商）"
+          options={suppliers}
+          rules={[
+            {
+              required: true,
+              message: "请选择乙方",
+            },
+          ]}
+        />
         <ProFormDigit
           name="contract_amount"
           label="合同金额"

@@ -75,8 +75,10 @@ const ViewForm = (props) => {
           label="合同类型"
           readonly
           options={[
-            { label: "非采购合同", value: "1" },
+            { label: "工程合同", value: "1" },
             { label: "采购合同", value: "2" },
+            { label: "劳务合同", value: "3" },
+            { label: "其他合同", value: "4" },
           ]}
         />
         <ProFormText
@@ -89,44 +91,17 @@ const ViewForm = (props) => {
           }}
         />
         <ProFormText name="project_name" label="合同名称" readonly />
-        <ProFormDependency name={["contract_type"]}>
-          {({ contract_type }) => {
-            if (contract_type === "2") {
-              return (
-                <ProFormSelect
-                  name="party_a"
-                  label="甲方"
-                  options={suppliers}
-                  readonly
-                  convertValue={(value) => {
-                    const supplier = suppliers?.find((s) => s.value == value);
-                    return supplier ? supplier.label : value;
-                  }}
-                />
-              );
-            }
-            return <ProFormText name="party_a" label="甲方" readonly />;
+        <ProFormText name="party_a" label="甲方" readonly />
+        <ProFormSelect
+          name="party_b_id"
+          label="乙方"
+          options={suppliers}
+          readonly
+          convertValue={(value) => {
+            const supplier = suppliers?.find((s) => s.value == value);
+            return supplier ? supplier.label : value;
           }}
-        </ProFormDependency>
-        <ProFormDependency name={["contract_type"]}>
-          {({ contract_type }) => {
-            if (contract_type === "2") {
-              return <ProFormText name="party_b" label="乙方" readonly />;
-            }
-            return (
-              <ProFormSelect
-                name="party_b_id"
-                label="乙方"
-                options={suppliers}
-                readonly
-                convertValue={(value) => {
-                  const supplier = suppliers?.find((s) => s.value == value);
-                  return supplier ? supplier.label : value;
-                }}
-              />
-            );
-          }}
-        </ProFormDependency>
+        />
         <ProFormDigit
           name="contract_amount"
           label="合同金额"
