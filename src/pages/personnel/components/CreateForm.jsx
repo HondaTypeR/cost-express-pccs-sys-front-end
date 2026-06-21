@@ -1,4 +1,4 @@
-import { Departments, Roles } from "@/enum.js";
+import { Roles } from "@/enum.js";
 import { addUser } from "@/services/user";
 import { PlusOutlined } from "@ant-design/icons";
 import {
@@ -8,11 +8,11 @@ import {
   ProFormText,
 } from "@ant-design/pro-components";
 import { useRequest } from "@umijs/max";
-import { Button, message } from "antd";
+import { Button, Modal, message } from "antd";
 import { useRef, useState } from "react";
 
 const CreateForm = (props) => {
-  const { reload, companyList } = props;
+  const { reload, companyList, deptList } = props;
   const formRef = useRef();
   const [open, setOpen] = useState(false);
 
@@ -58,6 +58,19 @@ const CreateForm = (props) => {
           onCancel: () => setOpen(false),
         }}
         onFinish={async (value) => {
+          if (value?.menu_role === "admin") {
+            const confirmed = await new Promise((resolve) => {
+              Modal.confirm({
+                title: "确认分配",
+                content: "系统管理员权限为系统最大权限，确认要分配吗？",
+                okText: "确认",
+                cancelText: "取消",
+                onOk: () => resolve(true),
+                onCancel: () => resolve(false),
+              });
+            });
+            if (!confirmed) return false;
+          }
           await run({
             ...value,
             owner_dept: Array.isArray(value?.owner_dept)
@@ -106,8 +119,8 @@ const CreateForm = (props) => {
               (item) => item.value === owner_company
             );
             const departmentIds = selectedCompany?.department?.split(",") || [];
-            const departmentOptions = Departments.filter((dept) =>
-              departmentIds.includes(dept.value)
+            const departmentOptions = deptList.filter((dept) =>
+              departmentIds.includes(String(dept.value))
             );
 
             return (

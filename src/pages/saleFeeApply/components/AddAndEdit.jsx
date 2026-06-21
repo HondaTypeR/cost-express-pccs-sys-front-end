@@ -1,4 +1,4 @@
-import { Departments } from "@/enum";
+import { getDeptLabel, useDeptOptions } from "@/hooks/useDeptOptions";
 import { addWorkFeeApply, updateWorkFeeApply } from "@/services/business";
 import { supplierList } from "@/services/supplier";
 import {
@@ -13,6 +13,7 @@ import { cloneElement, useEffect, useRef, useState } from "react";
 const AddAndEdit = (props) => {
   const { initialState } = useModel("@@initialState");
   const { currentUser } = initialState || {};
+  const { allDeptOptions } = useDeptOptions();
 
   const { trigger, record, onOk } = props;
   const formRef = useRef();
@@ -139,7 +140,7 @@ const AddAndEdit = (props) => {
           <span style={{ color: "#666" }}>收款人信息：</span>
           <span style={{ fontWeight: 500 }}>
             {currentUser?.nickname}(
-            {Departments.find((d) => d.value == currentUser?.owner_dept)?.label}
+            {getDeptLabel(allDeptOptions, currentUser?.owner_dept)}
             )
           </span>
         </div>

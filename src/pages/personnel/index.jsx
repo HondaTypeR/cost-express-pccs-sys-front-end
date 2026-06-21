@@ -1,6 +1,7 @@
-import { Departments, Roles } from "@/enum.js";
+import { Roles } from "@/enum.js";
 import { fetchCompany } from "@/services/company";
 import { fetchUser } from "@/services/user.js";
+import { getDeptLabel, useDeptOptions } from "@/hooks/useDeptOptions";
 import {
   PageContainer,
   ProDescriptions,
@@ -17,6 +18,7 @@ const Personnel = () => {
   const [currentRow, setCurrentRow] = useState();
   const [selectedRowsState, setSelectedRows] = useState([]);
   const [companyList, setCompanyList] = useState([]);
+  const { deptList, allDeptOptions } = useDeptOptions();
 
   const fetchCompanyList = async () => {
     const res = await fetchCompany();
@@ -49,11 +51,7 @@ const Personnel = () => {
       render: (text) => {
         if (text == null || text === "") return "-";
         const ids = String(text).split(",").filter(Boolean);
-        return ids
-          .map(
-            (id) => Departments.find((item) => item.value == id)?.label || id
-          )
-          .join("、");
+        return ids.map((id) => getDeptLabel(allDeptOptions, id)).join("、");
       },
     },
     {
@@ -85,6 +83,8 @@ const Personnel = () => {
           onOk={actionRef.current?.reload}
           values={record}
           companyList={companyList}
+          deptList={deptList}
+          allDeptOptions={allDeptOptions}
         />,
       ],
     },
@@ -102,6 +102,8 @@ const Personnel = () => {
             key="create"
             reload={actionRef.current?.reload}
             companyList={companyList}
+            deptList={deptList}
+            allDeptOptions={allDeptOptions}
           />,
         ]}
         request={async () => {

@@ -1,6 +1,6 @@
-import { Departments } from "@/enum.js";
 import { removeRule } from "@/services/ant-design-pro/api";
 import { fetchCompany } from "@/services/company";
+import { getDeptLabel, useDeptOptions } from "@/hooks/useDeptOptions";
 import { PageContainer, ProTable } from "@ant-design/pro-components";
 import { useRequest } from "@umijs/max";
 import { message } from "antd";
@@ -12,6 +12,7 @@ const Company = () => {
   const actionRef = useRef(null);
   const [selectedRowsState, setSelectedRows] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
+  const { deptList, allDeptOptions } = useDeptOptions();
 
   const { run: delRun, loading } = useRequest(removeRule, {
     manual: true,
@@ -38,9 +39,9 @@ const Company = () => {
       renderText: (text) => {
         if (!text) return "-";
         const departmentIds = text.split(",");
-        const labels = Departments.filter((item) =>
-          departmentIds.includes(item.value)
-        ).map((item) => item.label);
+        const labels = departmentIds
+          .map((id) => getDeptLabel(allDeptOptions, id))
+          .filter(Boolean);
         return labels.length > 0 ? labels.join(", ") : "-";
       },
     },
@@ -68,6 +69,7 @@ const Company = () => {
           key="config"
           onOk={actionRef.current?.reload}
           values={record}
+          deptList={deptList}
         />,
       ],
     },
@@ -105,7 +107,7 @@ const Company = () => {
         rowKey="key"
         search={false}
         toolBarRender={() => [
-          <CreateForm key="create" reload={actionRef.current?.reload} />,
+          <CreateForm key="create" reload={actionRef.current?.reload} deptList={deptList} />,
         ]}
         request={fetchCompany}
         columns={columns}
