@@ -1,4 +1,4 @@
-import { getDeptLabel, useDeptOptions } from "@/hooks/useDeptOptions";
+import { Departments } from "@/enum";
 import { addProcessRecord } from "@/services/business";
 import { supplierList } from "@/services/supplier";
 import {
@@ -13,7 +13,6 @@ import { cloneElement, useEffect, useRef, useState } from "react";
 const PaymentModal = (props) => {
   const { initialState } = useModel("@@initialState");
   const { currentUser } = initialState || {};
-  const { allDeptOptions } = useDeptOptions();
   const { trigger, record, onOk } = props;
   const formRef = useRef();
   const [open, setOpen] = useState(false);
@@ -117,7 +116,7 @@ const PaymentModal = (props) => {
         <div style={{ marginBottom: 8 }}>
           <span style={{ color: "#666" }}>制单部门：</span>
           <span style={{ fontWeight: 500 }}>
-            {getDeptLabel(allDeptOptions, currentUser?.owner_dept)}
+            {Departments.find((d) => d.value == currentUser?.owner_dept)?.label}
             ({currentUser?.nickname})
           </span>
         </div>

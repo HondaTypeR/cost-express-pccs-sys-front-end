@@ -12,6 +12,13 @@ export const MenuOptions = [
     { label: "权限管理", value: "/power" },
 ]
 
+export const Departments = [
+    { label: "综合办", value: '0' },
+    { label: "成本部", value: '1' },
+    { label: "工程部", value: '2' },
+    { label: "销售部", value: '3' },
+]
+
 export const Roles = [
     { label: "普通员工", value: 'user' },
     { label: "系统管理员", value: 'admin' },
@@ -69,37 +76,4 @@ export const WaitStatus = [
 export const ApplyDept = [
     { label: "销售部", value: '1' },
     { label: "综合办", value: '2' },
-]
-
-export const AllCheckerPowers = [
-    { label: "材料确认单", value: '材料确认单' },
-    { label: "人工确认单", value: '人工确认单' },
-    { label: "机械确认单", value: '机械确认单' },
-    { label: "分包工程确认单", value: '分包工程确认单' },
-    { label: "销售费用单", value: '销售费用单' },
-    { label: "办公费用报销单", value: '办公费用报销单' },
-    { label: "结算付款审批单", value: '结算付款审批单' },
-]
-
-export const AllMenuRoutes = [
-    { label: "欢迎页", value: "/welcome" },
-    { label: "部门管理", value: "/dept" },
-    { label: "数据看板", value: "/dashboard" },
-    { label: "人员管理", value: "/personnel" },
-    { label: "公司管理", value: "/company" },
-    { label: "供应商管理", value: "/supplier" },
-    { label: "权限管理", value: "/power" },
-    { label: "项目管理", value: "/project" },
-    { label: "合同管理", value: "/contract" },
-    { label: "补充合同管理", value: "/sub-contract-list" },
-    { label: "预算管理", value: "/comprehensive" },
-    { label: "材料管理", value: "/materialManagement" },
-    { label: "机械管理", value: "/mechanicalManagement" },
-    { label: "人工管理", value: "/artificialManagement" },
-    { label: "财务管理", value: "/financeManagement" },
-    { label: "工作台", value: "/workbench" },
-    { label: "办公费用报销单", value: "/workFeeApply" },
-    { label: "办公报销单审核", value: "/workFeeApplyApproval" },
-    { label: "销售费用报销单", value: "/saleFeeApply" },
-    { label: "销售报销单审核", value: "/saleFeeApplyApproval" },
 ]

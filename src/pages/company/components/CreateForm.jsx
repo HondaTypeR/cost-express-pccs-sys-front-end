@@ -1,3 +1,4 @@
+import { Departments } from "@/enum.js";
 import { addCompany } from "@/services/company";
 import { PlusOutlined } from "@ant-design/icons";
 import {
@@ -9,7 +10,7 @@ import { useRequest } from "@umijs/max";
 import { Button, message } from "antd";
 
 const CreateForm = (props) => {
-  const { reload, deptList } = props;
+  const { reload } = props;
 
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -60,7 +61,7 @@ const CreateForm = (props) => {
           label="部门"
           name="department"
           mode="multiple"
-          options={deptList}
+          options={Departments}
           rules={[
             {
               required: true,

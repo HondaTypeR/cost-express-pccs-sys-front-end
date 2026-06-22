@@ -1,5 +1,4 @@
-import { Roles } from "@/enum.js";
-import { getDepartmentSelectOptions } from "@/hooks/useDeptOptions";
+import { Departments, Roles } from "@/enum.js";
 import { updateUser } from "@/services/user";
 import {
   ModalForm,
@@ -8,11 +7,11 @@ import {
   ProFormText,
 } from "@ant-design/pro-components";
 import { useRequest } from "@umijs/max";
-import { message, Modal } from "antd";
+import { message } from "antd";
 import { cloneElement, useRef, useState } from "react";
 
 const UpdateForm = (props) => {
-  const { onOk, values, trigger, companyList, deptList, allDeptOptions } = props;
+  const { onOk, values, trigger, companyList } = props;
   const formRef = useRef();
 
   const [open, setOpen] = useState(false);
@@ -51,28 +50,12 @@ const UpdateForm = (props) => {
         }}
         initialValues={{
           ...values,
-          username: values?.name || values?.username,
           owner_dept:
             typeof values?.owner_dept === "string"
-              ? values.owner_dept.split(",").filter(Boolean).map(String)
-              : Array.isArray(values?.owner_dept)
-                ? values.owner_dept.map(String)
-                : values?.owner_dept,
+              ? values.owner_dept.split(",").filter(Boolean)
+              : values?.owner_dept,
         }}
         onFinish={async (formValues) => {
-          if (formValues?.menu_role === "admin") {
-            const confirmed = await new Promise((resolve) => {
-              Modal.confirm({
-                title: "确认分配",
-                content: "系统管理员权限为系统最大权限，确认要分配吗？",
-                okText: "确认",
-                cancelText: "取消",
-                onOk: () => resolve(true),
-                onCancel: () => resolve(false),
-              });
-            });
-            if (!confirmed) return false;
-          }
           await run({
             ...formValues,
             owner_dept: Array.isArray(formValues?.owner_dept)
@@ -120,11 +103,9 @@ const UpdateForm = (props) => {
             const selectedCompany = companyList.find(
               (item) => item.value === owner_company
             );
-            const departmentOptions = getDepartmentSelectOptions(
-              deptList,
-              allDeptOptions,
-              selectedCompany?.department,
-              values?.owner_dept
+            const departmentIds = selectedCompany?.department?.split(",") || [];
+            const departmentOptions = Departments.filter((dept) =>
+              departmentIds.includes(dept.value)
             );
 
             return (

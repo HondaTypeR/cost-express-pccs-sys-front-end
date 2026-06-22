@@ -1,3 +1,4 @@
+import { Departments } from "@/enum.js";
 import { updateCompany } from "@/services/company";
 import {
   ModalForm,
@@ -9,7 +10,7 @@ import { message } from "antd";
 import { cloneElement, useState } from "react";
 
 const UpdateForm = (props) => {
-  const { onOk, values, trigger, deptList } = props;
+  const { onOk, values, trigger } = props;
 
   const [open, setOpen] = useState(false);
 
@@ -71,7 +72,7 @@ const UpdateForm = (props) => {
           label="部门"
           name="department"
           mode="multiple"
-          options={deptList}
+          options={Departments}
           rules={[
             {
               required: true,
