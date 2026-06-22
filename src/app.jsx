@@ -1,5 +1,6 @@
 import { AvatarDropdown, AvatarName, Footer } from "@/components";
 import ChangePasswordModal from "@/components/ChangePasswordModal";
+import VersionUpdateNotifier from "@/components/VersionUpdateNotifier";
 import { getUserMenus } from "@/services/menu.js";
 import { currentUser as queryCurrentUser } from "@/services/userInfo.js";
 import {
@@ -218,3 +219,12 @@ export const layout = ({ initialState, setInitialState }) => {
 export const request = {
   ...errorConfig,
 };
+
+export function rootContainer(container) {
+  return (
+    <>
+      {container}
+      <VersionUpdateNotifier />
+    </>
+  );
+}

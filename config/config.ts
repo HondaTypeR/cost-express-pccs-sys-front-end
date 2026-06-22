@@ -1,5 +1,6 @@
 // https://umijs.org/config/
 
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { defineConfig } from '@umijs/max';
 import defaultSettings from './defaultSettings';
@@ -8,6 +9,16 @@ import proxy from './proxy';
 import routes from './routes';
 
 const { REACT_APP_ENV = 'dev' } = process.env;
+
+const getBuildVersion = () => {
+  const versionFile = join(__dirname, '../.build-version');
+  if (existsSync(versionFile)) {
+    return readFileSync(versionFile, 'utf-8').trim();
+  }
+  return 'dev';
+};
+
+const APP_BUILD_VERSION = getBuildVersion();
 
 /**
  * @name 使用公共路径
@@ -25,6 +36,10 @@ export default defineConfig({
   hash: true,
 
   publicPath: PUBLIC_PATH,
+
+  define: {
+    APP_BUILD_VERSION: JSON.stringify(APP_BUILD_VERSION),
+  },
 
   /**
    * @name 兼容性设置
