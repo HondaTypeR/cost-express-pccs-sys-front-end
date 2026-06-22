@@ -8,6 +8,47 @@ const CURRENT_VERSION = APP_BUILD_VERSION;
 let modalVisible = false;
 let snoozeUntil = 0;
 
+const clearBrowserCaches = async () => {
+  if (!window.caches) {
+    return;
+  }
+  const keys = await caches.keys();
+  await Promise.all(keys.map((key) => caches.delete(key)));
+};
+
+const skipWaitingWorker = (worker) =>
+  new Promise((resolve, reject) => {
+    const channel = new MessageChannel();
+    channel.port1.onmessage = (msgEvent) => {
+      if (msgEvent.data.error) {
+        reject(msgEvent.data.error);
+      } else {
+        resolve(msgEvent.data);
+      }
+    };
+    worker.postMessage({ type: 'skip-waiting' }, [channel.port2]);
+  });
+
+const reloadForUpdate = async () => {
+  try {
+    await clearBrowserCaches();
+
+    if ('serviceWorker' in navigator) {
+      const registration = await navigator.serviceWorker.getRegistration();
+      if (registration?.waiting) {
+        await skipWaitingWorker(registration.waiting);
+      }
+
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((reg) => reg.unregister()));
+    }
+  } catch {
+    // still reload even if cache/SW cleanup fails
+  }
+
+  window.location.reload();
+};
+
 const showUpdateModal = () => {
   if (modalVisible || Date.now() < snoozeUntil) {
     return;
@@ -21,9 +62,7 @@ const showUpdateModal = () => {
     okText: '立即刷新',
     cancelText: '稍后提醒',
     centered: true,
-    onOk: () => {
-      window.location.reload();
-    },
+    onOk: () => reloadForUpdate(),
     onCancel: () => {
       snoozeUntil = Date.now() + SNOOZE_DURATION;
     },
