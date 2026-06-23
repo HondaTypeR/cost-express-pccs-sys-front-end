@@ -29,9 +29,9 @@ const FinanceManagement = () => {
     (async () => {
       if (!currentUser?.id) return;
       const [m, me, a] = await Promise.all([
-        checkPower(`成本部-材料确认单-${currentUser.id}`, 1),
-        checkPower(`工程部-机械确认单-${currentUser.id}`, 1),
-        checkPower(`工程部-人工确认单-${currentUser.id}`, 1),
+        checkPower(`成本部-材料确认单-${currentUser.id}`, 1, currentUser?.role),
+        checkPower(`工程部-机械确认单-${currentUser.id}`, 1, currentUser?.role),
+        checkPower(`工程部-人工确认单-${currentUser.id}`, 1, currentUser?.role),
       ]);
       setCanMaterial(m);
       setCanMechanical(me);

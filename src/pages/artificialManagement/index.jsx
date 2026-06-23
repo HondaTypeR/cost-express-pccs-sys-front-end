@@ -44,7 +44,7 @@ const MaterialManagement = () => {
   useEffect(() => {
     (async () => {
       if (!currentUser?.id) return;
-      const ok = await checkPower(`${DEPT}-${POWER}-${currentUser.id}`, 1);
+      const ok = await checkPower(`${DEPT}-${POWER}-${currentUser.id}`, 1, currentUser?.role);
       setCanCreate(ok);
     })();
   }, [currentUser?.id]);
@@ -52,7 +52,7 @@ const MaterialManagement = () => {
   useEffect(() => {
     (async () => {
       if (!currentUser?.id) return;
-      const ok = await checkPower(`${DEPT}-${POWER}-${currentUser.id}`, 2);
+      const ok = await checkPower(`${DEPT}-${POWER}-${currentUser.id}`, 2, currentUser?.role);
       setCanReview(ok);
     })();
   }, [currentUser?.id]);

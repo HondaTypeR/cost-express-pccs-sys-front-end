@@ -29,10 +29,14 @@ const skipWaitingWorker = (worker) =>
     worker.postMessage({ type: 'skip-waiting' }, [channel.port2]);
   });
 
+const getCacheBustedUrl = () => {
+  const url = new URL(window.location.href);
+  url.searchParams.set('_update', Date.now().toString());
+  return url.toString();
+};
+
 const reloadForUpdate = async () => {
   try {
-    await clearBrowserCaches();
-
     if ('serviceWorker' in navigator) {
       const registration = await navigator.serviceWorker.getRegistration();
       if (registration?.waiting) {
@@ -42,11 +46,13 @@ const reloadForUpdate = async () => {
       const registrations = await navigator.serviceWorker.getRegistrations();
       await Promise.all(registrations.map((reg) => reg.unregister()));
     }
+
+    await clearBrowserCaches();
   } catch {
     // still reload even if cache/SW cleanup fails
   }
 
-  window.location.reload();
+  window.location.replace(getCacheBustedUrl());
 };
 
 const showUpdateModal = () => {
