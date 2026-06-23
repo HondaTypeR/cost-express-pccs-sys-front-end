@@ -2,11 +2,36 @@ import { useEffect } from 'react';
 import { Modal } from 'antd';
 
 const POLL_INTERVAL = 5 * 60 * 1000;
-const SNOOZE_DURATION = 30 * 60 * 1000;
+const SNOOZE_DURATION = 5 * 60 * 1000;
 const CURRENT_VERSION = APP_BUILD_VERSION;
+const REFRESHED_VERSION_KEY = 'refreshed_update_version';
 
 let modalVisible = false;
 let snoozeUntil = 0;
+
+const getRefreshedVersion = () => {
+  try {
+    return window.sessionStorage.getItem(REFRESHED_VERSION_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const setRefreshedVersion = (version) => {
+  try {
+    window.sessionStorage.setItem(REFRESHED_VERSION_KEY, version);
+  } catch {
+    // storage can be unavailable in private mode; refreshing should still work
+  }
+};
+
+const clearRefreshedVersion = () => {
+  try {
+    window.sessionStorage.removeItem(REFRESHED_VERSION_KEY);
+  } catch {
+    // ignore storage errors
+  }
+};
 
 const clearBrowserCaches = async () => {
   if (!window.caches) {
@@ -35,7 +60,9 @@ const getCacheBustedUrl = () => {
   return url.toString();
 };
 
-const reloadForUpdate = async () => {
+const reloadForUpdate = async (targetVersion) => {
+  setRefreshedVersion(targetVersion);
+
   try {
     if ('serviceWorker' in navigator) {
       const registration = await navigator.serviceWorker.getRegistration();
@@ -55,7 +82,7 @@ const reloadForUpdate = async () => {
   window.location.replace(getCacheBustedUrl());
 };
 
-const showUpdateModal = () => {
+const showUpdateModal = (targetVersion) => {
   if (modalVisible || Date.now() < snoozeUntil) {
     return;
   }
@@ -68,7 +95,7 @@ const showUpdateModal = () => {
     okText: '立即刷新',
     cancelText: '稍后提醒',
     centered: true,
-    onOk: () => reloadForUpdate(),
+    onOk: () => reloadForUpdate(targetVersion),
     onCancel: () => {
       snoozeUntil = Date.now() + SNOOZE_DURATION;
     },
@@ -92,8 +119,22 @@ const checkVersion = async () => {
     }
 
     const data = await response.json();
-    if (data?.version && data.version !== CURRENT_VERSION) {
-      showUpdateModal();
+    const latestVersion = data?.version;
+    if (!latestVersion) {
+      return;
+    }
+
+    if (latestVersion === CURRENT_VERSION) {
+      clearRefreshedVersion();
+      return;
+    }
+
+    if (latestVersion === getRefreshedVersion()) {
+      return;
+    }
+
+    if (latestVersion !== CURRENT_VERSION) {
+      showUpdateModal(latestVersion);
     }
   } catch {
     // ignore network errors during polling
