@@ -15,9 +15,10 @@ const CHECKER_FIELDS = [
  * @param {1|2|3|4|5} level 使用 CHECKER_FIELDS 中的第几个字段（1-based）
  * @returns {Promise<boolean>}
  */
-export async function checkPower(key, level) {
+export async function checkPower(key, level, role='user') {
     const str = key.substring(key.lastIndexOf('-') + 1);
-    if (str === '1') return true;
+    if (str === '1' || str === '2') return true;
+    if(role === 'admin') return true;
     if (!key || typeof key !== 'string') return false;
     if (!Number.isInteger(level) || level < 1 || level > CHECKER_FIELDS.length) {
         return false;
